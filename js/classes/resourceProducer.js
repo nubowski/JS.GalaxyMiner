@@ -13,6 +13,11 @@ class ResourceProducer {
     upgrade() {
         // inc this.rate and dec player's res count by this.cost
     }
+
+    updateResourceQuantity(seconds) {
+        let amount = this.productionRate * seconds;
+        this.resourceType.addQuantity(amount);
+    }
 }
 
 export default ResourceProducer;
