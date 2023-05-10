@@ -1,0 +1,1 @@
+export const UPGRADE_COST_MULTIPLIER = 1.07;
