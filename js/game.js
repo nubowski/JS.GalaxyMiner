@@ -20,6 +20,9 @@ function update() {
     // Each produce on every prod
     for (let producer of producers) {
         producer.produce();
+        if (metal.quantity >= metalDrill.baseCost) {
+            metalDrill.upgrade();
+        }
     }
 
     // Some debug
