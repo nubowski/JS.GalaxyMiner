@@ -1,4 +1,4 @@
-import {UPGRADE_COST_MULTIPLIER} from "./constants";
+import {UPGRADE_COST_MULTIPLIER} from "./constants.js";
 
 class ResourceProducer {
     constructor(name, resourceType, productionRate, baseCost) {
