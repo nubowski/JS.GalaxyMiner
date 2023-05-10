@@ -1,6 +1,8 @@
 import Resource from './classes/resource.js';
 import ResourceProducer from "./classes/resourceProducer.js";
 
+import {UPGRADE_COST_MULTIPLIER} from "./classes/constants";
+
 // Init resources
 let metal = new Resource('Metal', 0);
 
@@ -47,7 +49,7 @@ function updateUI() {
     for (let producer of producers) {
         productionContainer.innerHTML += `<p>${producer.name} (Level ${producer.level}): ` +
         `Produces ${producer.productionRate.toFixed(2)} per second. ` +
-        `Cost for next upgrade: ${producer.baseCost * Math.pow(1.07, producer.level)}</p>`;
+        `Cost for next upgrade: ${producer.baseCost * Math.pow(UPGRADE_COST_MULTIPLIER, producer.level)}</p>`;
     }
 }
 

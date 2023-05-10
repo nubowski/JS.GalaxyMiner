@@ -1,3 +1,5 @@
+import {UPGRADE_COST_MULTIPLIER} from "./constants";
+
 class ResourceProducer {
     constructor(name, resourceType, productionRate, baseCost) {
         this.name = name;
@@ -15,7 +17,7 @@ class ResourceProducer {
 
     upgrade() {
         // inc this.rate and dec player's res count by this.cost
-        let cost = Math.floor(this.baseCost * Math.pow(1.07, this.level));
+        let cost = Math.floor(this.baseCost * Math.pow(UPGRADE_COST_MULTIPLIER, this.level));
         if (this.resourceType.subtractQuantity(cost)) {
             this.productionRate++;
             this.level++;
