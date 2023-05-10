@@ -7,10 +7,10 @@ import {UPGRADE_COST_MULTIPLIER} from "./classes/constants.js";
 let metal = new Resource('Metal', 0);
 
 // Init producers
-
 let metalDrill = new ResourceProducer('Metal Drill', metal, 1, 10);
 
 // Array to hold all prods
+let resources = [metal]
 let producers = [metalDrill];
 
 // Game Loop
@@ -21,16 +21,10 @@ function update() {
     // Each produce on every prod
     for (let producer of producers) {
         producer.produce();
-        if (metal.quantity >= metalDrill.baseCost) {
-            metalDrill.upgrade();
         }
-    }
 
     // Update the UI
     updateUI();
-
-    // Some debug
-    console.log(`Metal: ${metal.quantity}`);
 }
 
 function updateUI() {
