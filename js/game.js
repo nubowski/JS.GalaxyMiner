@@ -1,13 +1,34 @@
 import Resource from './classes/resource.js';
 import ResourceProducer from "./classes/resourceProducer";
 
-// new instances of the res class for each of res
-let iron = new Resource('Iron', 0, 1);
-let copper = new Resource('Copper', 0, 0);
-let titanium = new Resource('Titanium', 0, 0);
-let energy = new Resource('Energy', 0, 0);
+// Init resources
+let metal = new Resource('Metal', 0);
 
-//access and modify the props
-console.log(iron.name); // outputs 'Iron'
-iron.updateQuantity(5); // Inc the q of iron by 5
-console.log(iron.quantity); // outputs '5'
+// Init producers
+
+let metalDrill = new ResourceProducer('Metal Drill', metal, 1, 10);
+
+// Array to hold all prods
+let producers = [metalDrill];
+
+// Game Loop
+setInterval(update, 1000);
+
+
+// Update function
+function update() {
+    // Each produce on every prod
+    for (let producer of producers) {
+        producer.produce();
+    }
+
+    // Some debug
+    console.log(`Metal: ${metal.quantity}`);
+}
+
+
+
+
+
+
+
