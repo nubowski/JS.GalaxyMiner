@@ -8,6 +8,8 @@ class ResourceProducer {
 
     produce() {
         // inc player's res count of this.type by this.rate
+        let amount = this.productionRate;
+        this.resourceType.addQuantity(amount);
     }
 
     upgrade() {

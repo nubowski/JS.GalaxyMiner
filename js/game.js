@@ -1,5 +1,5 @@
 import Resource from './classes/resource.js';
-import ResourceProducer from "./classes/resourceProducer";
+import ResourceProducer from "./classes/resourceProducer.js";
 
 // Init resources
 let metal = new Resource('Metal', 0);
