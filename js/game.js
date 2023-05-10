@@ -1,4 +1,5 @@
 import Resource from './classes/resource.js';
+import ResourceProducer from "./classes/resourceProducer";
 
 // new instances of the res class for each of res
 let iron = new Resource('Iron', 0, 1);
