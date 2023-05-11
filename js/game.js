@@ -1,17 +1,23 @@
 import Resource from './classes/resource.js';
 import ResourceProducer from "./classes/resourceProducer.js";
 
-import {UPGRADE_COST_MULTIPLIER} from "./classes/constants.js";
 
 // Init resources
 let metal = new Resource('Metal', 0);
+let carbon = new Resource('Carbon', 0);
 
 // Init producers
-let metalDrill = new ResourceProducer('Metal Drill', metal, 1, 10);
+let metalDrill = new ResourceProducer('Metal Drill', metal, 1, [
+    {resource: metal, baseCost: 10}
+]);
+let carbonExtractor = new ResourceProducer('Carbon Extractor', carbon, 1,[
+    {resource: metal, baseCost: 30},
+    {resource: carbon, baseCost: 50}
+]);
 
 // Array to hold all prods
-let resources = [metal]
-let producers = [metalDrill];
+let resources = [metal,carbon]
+let producers = [metalDrill,carbonExtractor];
 
 // Game Loop
 setInterval(update, 1000);
@@ -43,11 +49,17 @@ function updateUI() {
 
     // add current state of producers to container
     for (let producer of producers) {
+        let costString = '';
+        for (let resourceObj of producer.cost) {
+            costString += `${resourceObj.amount.toFixed(2)} ${resourceObj.resource.name}, `;
+        }
+        costString = costString.slice(0, -2);  // trailing comma and space
+
         productionContainer.innerHTML += `
             <p>
                 ${producer.name} (Level ${producer.level}): Produces ${producer.productionRate.toFixed(2)} 
                 ${producer.resourceType.name} per second. Cost for next upgrade: 
-                ${(producer.baseCost * Math.pow(UPGRADE_COST_MULTIPLIER, producer.level)).toFixed(2)}
+                ${costString}
             </p>
             <button id="${producer.name}-upgrade">Upgrade ${producer.name}</button>
         `;

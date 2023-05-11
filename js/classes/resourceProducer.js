@@ -1,12 +1,16 @@
 import {UPGRADE_COST_MULTIPLIER} from "./constants.js";
 
 class ResourceProducer {
-    constructor(name, resourceType, productionRate, baseCost) {
+    constructor(name, resourceType, productionRate, cost) {
         this.name = name;
         this.resourceType = resourceType;
         this.productionRate = productionRate;
-        this.baseCost = baseCost;
         this.level = 1;
+        this.cost = cost.map(resourceObj => ({
+            resource: resourceObj.resource,
+            baseCost: resourceObj.baseCost,
+            amount: resourceObj.baseCost
+        }));
     }
 
     produce() {
@@ -17,14 +21,26 @@ class ResourceProducer {
 
     upgrade() {
         // inc this.rate and dec player's res count by this.cost
-        let cost = Math.floor(this.baseCost * Math.pow(UPGRADE_COST_MULTIPLIER, this.level));
-        if (this.resourceType.subtractQuantity(cost)) {
+        let canUpgrade = true;
+        for (let resourceObj of this.cost) {
+            if (!resourceObj.resource.subtractQuantity(resourceObj.amount)) {
+                canUpgrade = false;
+                break;
+            }
+        }
+        if (canUpgrade) {
             this.productionRate++;
             this.level++;
-            this.cost = cost;
-            console.log(`Upgrade ${this.name} to level ${this.level}!`);
+            this.updateCost();
+            console.log(`Upgraded ${this.name} to level ${this.level}!`);
         } else {
             console.log("Insufficient resources to upgrade!");
+        }
+    }
+
+    updateCost() {
+        for (let resourceObj of this.cost) {
+            resourceObj.amount = Math.floor(resourceObj.baseCost * Math.pow(UPGRADE_COST_MULTIPLIER, this.level));
         }
     }
 }
