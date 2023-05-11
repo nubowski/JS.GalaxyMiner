@@ -1,5 +1,10 @@
 import {UPGRADE_COST_MULTIPLIER} from "./constants.js";
 
+import GameLog from "./gameLog.js";
+
+// Init GameLog info
+let gameLog = new GameLog();
+
 class ResourceProducer {
     constructor(name, resourceType, productionRate, cost) {
         this.name = name;
@@ -32,9 +37,9 @@ class ResourceProducer {
             this.productionRate++;
             this.level++;
             this.updateCost();
-            console.log(`Upgraded ${this.name} to level ${this.level}!`);
+            gameLog.info(`Upgraded ${this.name} to level ${this.level}!`);
         } else {
-            console.log("Insufficient resources to upgrade!");
+            gameLog.negative("Insufficient resources to upgrade!");
         }
     }
 
