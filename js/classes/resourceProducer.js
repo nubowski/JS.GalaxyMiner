@@ -37,9 +37,9 @@ class ResourceProducer {
             this.productionRate++;
             this.level++;
             this.updateCost();
-            gameLog.addToLog(`Upgraded ${this.name} to level ${this.level}!`);
+            gameLog.info(`Upgraded ${this.name} to level ${this.level}!`);
         } else {
-            gameLog.addToLog("Insufficient resources to upgrade!");
+            gameLog.negative("Insufficient resources to upgrade!");
         }
     }
 

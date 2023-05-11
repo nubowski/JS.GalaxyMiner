@@ -66,3 +66,25 @@ button {
     margin-top: 10px;
     cursor: pointer;
 }
+
+/* GameLog different colors */
+
+.info {
+    color: blue;
+}
+
+.error {
+    color: red;
+}
+
+.debug {
+    color: gray;
+}
+
+.positive {
+    color: green;
+}
+
+.negative {
+    color: orange;
+}

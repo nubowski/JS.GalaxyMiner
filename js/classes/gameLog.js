@@ -3,18 +3,43 @@ import {MAX_LOG_ENTRIES} from "./constants.js";
 class GameLog {
     constructor(maxEntries = MAX_LOG_ENTRIES) {
         this.maxEntries = maxEntries;
+        this.logEntries = [];
         this.logElement = document.getElementById('game-log');
     }
 
-    addToLog(message) {
-        let newLogEntry = document.createElement('p');
-        newLogEntry.textContent = message;
-        this.logElement.appendChild(newLogEntry);
+    error(message) {
+        this.addToLog(message, "error");
+    }
 
-        // threshold MAX_LOG_ENTRIES is out
-        while (this.logElement.childElementCount > this.maxEntries) {
-            // remove oldest create newest?
-            this.logElement.removeChild(this.logElement.firstChild);
+    info(message) {
+        this.addToLog(message, "info");
+    }
+
+    debug(message) {
+        this.addToLog(message, "debug");
+    }
+
+    positive(message) {
+        this.addToLog(message, "positive");
+    }
+
+    negative(message) {
+        this.addToLog(message, "negative");
+    }
+
+    addToLog(message, messageType) {
+        if (this.logEntries.length >= this.maxEntries) {
+            this.logEntries.pop(); // remove last element
+        }
+        this.logEntries.unshift({message, messageType}); // prepend
+        this.updateLog();
+    }
+
+    updateLog() {
+        this.logElement.innerHTML = '';
+        for (let entry of this.logEntries) {
+            this.logElement.innerHTML = `
+                <p class="${entry.messageType}">${entry.message}</p>` + this.logElement.innerHTML;
         }
     }
 }
