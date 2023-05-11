@@ -36,10 +36,20 @@ class GameLog {
     }
 
     updateLog() {
+        // clear existing log HTML
         this.logElement.innerHTML = '';
-        for (let entry of this.logEntries) {
-            this.logElement.innerHTML = `
-                <p class="${entry.messageType}">${entry.message}</p>` + this.logElement.innerHTML;
+
+        // loop through the log entries (reversed)
+        for (let i = 0; i < this.logEntries.length; i++) {
+            const entry = this.logEntries[i];
+
+            // new p element
+            const logEntryElement = document.createElement('p');
+            logEntryElement.className = entry.messageType;
+            logEntryElement.textContent = entry.message;
+
+            // log entry to the log element
+            this.logElement.appendChild(logEntryElement);
         }
     }
 }
