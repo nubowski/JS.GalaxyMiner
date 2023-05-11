@@ -1,6 +1,9 @@
 import Resource from './classes/resource.js';
 import ResourceProducer from "./classes/resourceProducer.js";
+import GameLog from "./classes/gameLog.js";
 
+// Init game log
+let gameLog = new GameLog();
 
 // Init resources
 let metal = new Resource('Metal', 0);
