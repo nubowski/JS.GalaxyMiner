@@ -1,4 +1,4 @@
-import {MAX_BUILDING_SPACE} from "./constants";
+import {MAX_BUILDING_SPACE} from "./constants.js";
 
 class BuildingManager {
     constructor(maxSpaces = MAX_BUILDING_SPACE) {
@@ -40,3 +40,5 @@ class BuildingManager {
         return false;
     }
 }
+
+export default BuildingManager;

@@ -1,6 +1,7 @@
 import Resource from './classes/resource.js';
 import Producer from "./classes/producer.js";
 import GameLog from "./classes/gameLog.js";
+import BuildingManager from './classes/buildingManager.js';
 
 // Init game log
 let gameLog = new GameLog();
@@ -9,13 +10,14 @@ let gameLog = new GameLog();
 let metal = new Resource('Metal', 0);
 let carbon = new Resource('Carbon', 0);
 
-// Init buildings
+// Init building manager
+let buildingManager = new BuildingManager();
 
 // Init producers (name, space, resourceType, productionRate, cost)
 let metalDrill = new Producer('Metal Drill', 2, metal, 1, [
     {resource: metal, baseCost: 10}
 ]);
-let carbonExtractor = new Producer('Carbon Extractor', carbon, 1,[
+let carbonExtractor = new Producer('Carbon Extractor', 2, carbon, 1,[
     {resource: metal, baseCost: 30},
     {resource: carbon, baseCost: 50}
 ]);
