@@ -17,6 +17,10 @@ class Resource {
             return false;
         }
     }
- }
+
+    canSubtract(amount) {
+        return this.quantity >= amount;
+    }
+}
 
 export default Resource;

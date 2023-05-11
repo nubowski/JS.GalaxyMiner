@@ -6,12 +6,12 @@ import BuildingManager from './classes/buildingManager.js';
 // Init game log
 let gameLog = new GameLog();
 
+// Init building manager
+let buildingManager = new BuildingManager();
+
 // Init resources
 let metal = new Resource('Metal', 0);
 let carbon = new Resource('Carbon', 0);
-
-// Init building manager
-let buildingManager = new BuildingManager();
 
 // Init producers (name, space, resourceType, productionRate, cost)
 let metalDrill = new Producer('Metal Drill', 2, metal, 1, [

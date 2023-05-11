@@ -5,6 +5,8 @@ import {UPGRADE_COST_MULTIPLIER} from "./constants.js";
 // Init GameLog info
 let gameLog = new GameLog();
 
+
+
 class Building {
     constructor(name, space, cost) {
         this.name = name;
@@ -17,20 +19,25 @@ class Building {
         }));
     }
 
-    build() {
-        // Set level to 1 and subtract cost from player's resources
-        let canBuild = true;
-        for (let resourceObj of this.cost) {
-            if (!resourceObj.resource.subtractQuantity(resourceObj.amount)) {
-                canBuild = false;
-                break;
+    setLevel(level) {
+        this.level = level;
+    }
+
+    build(buildingManager) {
+        if (this.hasSufficientResources() && buildingManager.hasSufficientSpace(this)) {
+            if (buildingManager.addBuilding(this)) {
+                this.subtractResourcesForBuilding();
+                gameLog.info(`Built ${this.name}!`);
+            } else {
+                gameLog.error("Unexpected Error!");
             }
-        }
-        if (canBuild) {
-            this.level = 1;
-            gameLog.info(`Built ${this.name}!`);
         } else {
-            gameLog.negative("Insufficient resources to build!");
+            if (!this.hasSufficientResources()) {
+                gameLog.negative("Insufficient resources to build!")
+            }
+            if (!buildingManager.hasSufficientSpace(this)) {
+                gameLog.negative("Not enough space to build!");
+            }
         }
     }
 
@@ -55,6 +62,21 @@ class Building {
     updateCost() {
         for (let resourceObj of this.cost) {
             resourceObj.amount = Math.floor(resourceObj.baseCost * Math.pow(UPGRADE_COST_MULTIPLIER, this.level));
+        }
+    }
+
+    hasSufficientResources() {
+        for (let resourceObj of this.cost){
+            if (!resourceObj.resource.canSubtract(resourceObj.amount)) {
+                return false;
+            }
+        }
+        return true;
+     }
+
+    subtractResourcesForBuilding() {
+        for (let resourceObj of this.cost) {
+            resourceObj.resource.subtractQuantity(resourceObj.amount);
         }
     }
 }
