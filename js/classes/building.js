@@ -6,8 +6,9 @@ import {UPGRADE_COST_MULTIPLIER} from "./constants.js";
 let gameLog = new GameLog();
 
 class Building {
-    constructor(name, cost) {
+    constructor(name, space, cost) {
         this.name = name;
+        this.space = space;
         this.level = 0;
         this.cost = cost.map(resourceObj => ({
             resource: resourceObj.resource,

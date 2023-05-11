@@ -9,8 +9,10 @@ let gameLog = new GameLog();
 let metal = new Resource('Metal', 0);
 let carbon = new Resource('Carbon', 0);
 
-// Init producers
-let metalDrill = new Producer('Metal Drill', metal, 1, [
+// Init buildings
+
+// Init producers (name, space, resourceType, productionRate, cost)
+let metalDrill = new Producer('Metal Drill', 2, metal, 1, [
     {resource: metal, baseCost: 10}
 ]);
 let carbonExtractor = new Producer('Carbon Extractor', carbon, 1,[
@@ -21,6 +23,7 @@ let carbonExtractor = new Producer('Carbon Extractor', carbon, 1,[
 // Array to hold all producers
 let resources = [metal,carbon];
 let producers = [metalDrill,carbonExtractor];
+let buildings = [];
 
 // Game Loop
 setInterval(update, 1000);

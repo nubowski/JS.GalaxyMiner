@@ -1,8 +1,8 @@
 import Building from "./building.js";
 
 class Producer extends Building {
-    constructor(name, resourceType, productionRate, cost) {
-        super(name, cost);
+    constructor(name, space, resourceType, productionRate, cost) {
+        super(name, space, cost);
         this.resourceType = resourceType;
         this.productionRate = productionRate;
     }
