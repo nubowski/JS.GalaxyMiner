@@ -1,4 +1,4 @@
- class Resource {
+class Resource {
      // run when a new instance of the class is created
     constructor(name, quantity) {
         this.name = name; // name of the res
@@ -19,4 +19,4 @@
     }
  }
 
- export default Resource;
+export default Resource;
