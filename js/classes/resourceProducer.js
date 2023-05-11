@@ -27,11 +27,6 @@ class ResourceProducer {
             console.log("Insufficient resources to upgrade!");
         }
     }
-
-    updateResourceQuantity(seconds) {
-        let amount = this.productionRate * seconds;
-        this.resourceType.addQuantity(amount);
-    }
 }
 
 export default ResourceProducer;
