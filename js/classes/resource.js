@@ -1,4 +1,4 @@
- class Resource {
+class Resource {
      // run when a new instance of the class is created
     constructor(name, quantity) {
         this.name = name; // name of the res
@@ -17,6 +17,10 @@
             return false;
         }
     }
- }
 
- export default Resource;
+    canSubtract(amount) {
+        return this.quantity >= amount;
+    }
+}
+
+export default Resource;
