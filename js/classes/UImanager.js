@@ -40,6 +40,27 @@ class UImanager {
             container.appendChild(button);
         }
     }
+
+    updateBuildingDisplay (buildings) {
+        const container = document.getElementById('buildings-container');
+        container.innerHTML = '';
+
+        for (let building of buildings) {
+            let buildingDiv = document.createElement('div');
+            let upgradeButton = document.createElement('button');
+
+            upgradeButton.textContent = `Upgrade ${building.name}`;
+            upgradeButton.onclick = () => {
+                building.upgrade();
+            }
+
+            buildingDiv.textContent = `${building.name} - Level: ${building.level}`;
+            buildingDiv.appendChild(upgradeButton);
+
+            container.appendChild(buildingDiv);
+        }
+    }
+
 }
 
 export default UImanager;

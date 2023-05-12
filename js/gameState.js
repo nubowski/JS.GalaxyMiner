@@ -1,6 +1,7 @@
 import Resource from './classes/resource.js';
 import Producer from "./classes/producer.js";
 import GameLog from "./classes/gameLog.js";
+import Building from "./classes/building.js";
 import BuildingManager from './classes/buildingManager.js';
 import BuildingQueue from "./classes/buildingQueue.js";
 import UImanager from "./classes/UImanager.js";
@@ -57,6 +58,7 @@ setInterval(() => {
     }
     // Update the display
     gameState.uiManager.updateDisplay(resources, buildingManager);
+    gameState.uiManager.updateBuildingDisplay(buildingManager.builtBuildings);
 
     // Generate build buttons
     if (!areButtonsGenerated) {

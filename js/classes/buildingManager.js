@@ -8,6 +8,11 @@ class BuildingManager {
         this.reservedSpaces = 0;
         this.buildings = [];
         this.constructionQueue = [];
+        this.builtBuildings = [];
+    }
+
+    getBuiltBuildings() {
+        return this.builtBuildings;
     }
 
     canBuild(building) {
@@ -25,6 +30,7 @@ class BuildingManager {
     addBuilding(building, initialLevel = DEFAULT_BUILDING_LEVEL) {
         if (this.reserveSpace(building)) {
             this.buildings.push(building);
+            this.builtBuildings.push(building);
             this.usedSpaces += building.space;
             this.reservedSpaces -= building.space;
             building.setLevel(initialLevel);
