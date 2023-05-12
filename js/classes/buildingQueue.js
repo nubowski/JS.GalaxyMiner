@@ -25,22 +25,22 @@ class BuildingQueue {
 
     startTimer() {
         let building = this.queue[0];
-        setTimeout(() => {
-            // after time is up, remove the building from the queue
-            this.queue.shift();
-            // pull the building to the building manager
-            if (building !== null) {
-                this.gameState.buildingManager.addBuilding(building);
-            }
-            // if there are buildings in the queue, start the next timer
-            if (this.queue.length > 0) {
-                this.startTimer();
-            }
-        }, building.constructionTime);
+        if (building !== null) {
+            setTimeout(() => {
+                this.removeFromQueue();
+                if (this.queue.length > 0) {
+                    this.startTimer();
+                }
+            }, building.constructionTime);
+        }
     }
 
     removeFromQueue () {
-        return this.queue.shift();
+        if (this.queue.length > 0) {
+            return this.queue.shift();
+        } else {
+            return null;
+        }
     }
 
     getQueueLength() {
