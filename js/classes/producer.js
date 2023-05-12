@@ -1,16 +1,15 @@
 import {DEFAULT_BUILDING_LEVEL, DEFAULT_CONSTRUCTION_TIME, UPGRADE_COST_MULTIPLIER} from "./constants.js";
-
 import Building from "./building.js";
-import GameLog from "./gameLog.js";
-
-//Init
-let gameLog = new GameLog();
 
 class Producer extends Building {
     constructor(name, space, level = DEFAULT_BUILDING_LEVEL, constructionTime = DEFAULT_CONSTRUCTION_TIME, resourceType, productionRate, cost) {
         super(name, space, level, constructionTime, cost);
         this.resourceType = resourceType;
         this.productionRate = productionRate;
+    }
+
+    setGameState(gameState) {
+        this.gameState = gameState;
     }
 
     produce() {
@@ -31,9 +30,9 @@ class Producer extends Building {
             this.level++;
             this.productionRate *= this.level;
             this.cost.forEach(resourceObj => resourceObj.amount *= Math.pow(UPGRADE_COST_MULTIPLIER, this.level));
-            gameLog.info(`Upgraded ${this.name} to level ${this.level}!`);
+            this.gameState.gameLog.info(`Upgraded ${this.name} to level ${this.level}!`);
         } else {
-            gameLog.negative("Insufficient resources to upgrade!");
+            this.gameState.gameLog.negative("Insufficient resources to upgrade!");
         }
     }
 }

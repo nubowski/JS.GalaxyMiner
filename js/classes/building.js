@@ -20,6 +20,10 @@ class Building {
         }));
     }
 
+    setGameState(gameState) {
+        this.gameState = gameState;
+    }
+
     setLevel(level) {
         this.level = level;
     }
@@ -28,16 +32,16 @@ class Building {
         if (this.hasSufficientResources() && buildingManager.hasSufficientSpace(this)) {
             if (buildingManager.addBuilding(this)) {
                 this.subtractResourcesForBuilding();
-                gameLog.info(`Built ${this.name}!`);
+                this.gameState.gameLog.info(`Built ${this.name}!`);
             } else {
-                gameLog.error("Unexpected Error!");
+                this.gameState.gameLog.error("Unexpected Error!");
             }
         } else {
             if (!this.hasSufficientResources()) {
-                gameLog.negative("Insufficient resources to build!")
+                this.gameState.gameLog.negative("Insufficient resources to build!")
             }
             if (!buildingManager.hasSufficientSpace(this)) {
-                gameLog.negative("Not enough space to build!");
+                this.gameState.gameLog.negative("Not enough space to build!");
             }
         }
     }
@@ -53,9 +57,9 @@ class Building {
         if (canUpgrade) {
             this.level++;
             this.cost.forEach(resourceObj => resourceObj.amount *= Math.pow(UPGRADE_COST_MULTIPLIER, this.level));
-            gameLog.info(`Upgraded ${this.name} to level ${this.level}!`);
+            this.gameState.gameLog.info(`Upgraded ${this.name} to level ${this.level}!`);
         } else {
-            gameLog.negative("Insufficient resources to upgrade!");
+            this.gameState.gameLog.negative("Insufficient resources to upgrade!");
         }
     }
 
