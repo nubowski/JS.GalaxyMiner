@@ -1,4 +1,4 @@
-import {UPGRADE_COST_MULTIPLIER} from "./constants.js";
+import {DEFAULT_BUILDING_LEVEL, DEFAULT_CONSTRUCTION_TIME, UPGRADE_COST_MULTIPLIER} from "./constants.js";
 
 import Building from "./building.js";
 import GameLog from "./gameLog.js";
@@ -7,8 +7,8 @@ import GameLog from "./gameLog.js";
 let gameLog = new GameLog();
 
 class Producer extends Building {
-    constructor(name, space, resourceType, productionRate, cost) {
-        super(name, space, cost);
+    constructor(name, space, level = DEFAULT_BUILDING_LEVEL, constructionTime = DEFAULT_CONSTRUCTION_TIME, resourceType, productionRate, cost) {
+        super(name, space, level, constructionTime, cost);
         this.resourceType = resourceType;
         this.productionRate = productionRate;
     }

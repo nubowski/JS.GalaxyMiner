@@ -13,11 +13,11 @@ let buildingQueue = new BuildingQueue();
 let metal = new Resource('Metal', 0);
 let carbon = new Resource('Carbon', 0);
 
-// Init producers (name, space, resourceType, productionRate, cost)
-let metalDrill = new Producer('Metal Drill', 2, metal, 1, [
+// Init producers (name, space, level, constructionTime, resourceType, productionRate, cost)
+let metalDrill = new Producer('Metal Drill', 2, 1, 10000, metal, 1, [
     {resource: metal, baseCost: 10}
 ]);
-let carbonExtractor = new Producer('Carbon Extractor', 2, carbon, 1,[
+let carbonExtractor = new Producer('Carbon Extractor', 2, 1, 5000, carbon, 1,[
     {resource: metal, baseCost: 30},
     {resource: carbon, baseCost: 50}
 ]);
