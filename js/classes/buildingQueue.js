@@ -31,6 +31,7 @@ class BuildingQueue {
             building.remainingTime = building.constructionTime; // initialize remaining time
             console.log(`Added ${building.name} to queue with remaining time: ${building.remainingTime}`);
             this.queue.push(building);
+            this.gameState.uiManager.updateQueueDisplay(this.queue);
             return true;
         } else {
             return false;
@@ -42,6 +43,7 @@ class BuildingQueue {
             let building = this.queue.shift();
             // Pass the completed building to the BuildingManager
             this.gameState.buildingManager.addBuilding(building);
+            this.gameState.uiManager.updateQueueDisplay(this.queue);
         }
     }
 
