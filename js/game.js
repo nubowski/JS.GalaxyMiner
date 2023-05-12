@@ -73,9 +73,12 @@ function updateUI() {
         `;
     }
 
-    // Event listeners for buttons
+    // Event listeners for clicks on buttons
     for (let producer of producers) {
         document.getElementById(`${producer.name}-upgrade`).addEventListener('click', () => {
+            if (!buildingQueue.addToQueue(producer)) {
+                gameLog.negative("Building queue is full!");
+            }
             producer.upgrade();
         })
     }
