@@ -1,13 +1,17 @@
 import Resource from './classes/resource.js';
 import Producer from "./classes/producer.js";
 import GameLog from "./classes/gameLog.js";
+import Building from "./classes/building.js";
 import BuildingManager from './classes/buildingManager.js';
 import BuildingQueue from "./classes/buildingQueue.js";
+import UImanager from "./classes/UImanager.js";
 
 // Inits
+let uiManager = new UImanager();
 let gameLog = new GameLog();
 let buildingManager = new BuildingManager();
 let buildingQueue = new BuildingQueue();
+let areButtonsGenerated = false;
 
 // Init resources
 let metal = new Resource('Metal', 0);
@@ -35,14 +39,7 @@ let gameState = {
     resources: resources,
     producers: producers,
     buildings: buildings,
-    generateBuildButtons: function() {
-        for (let producer of this.producers) {
-            let button = document.createElement('button');
-            button.innerHTML = `Build ${producer.name}`;
-            button.onclick = () => producer.build(this.buildingManager);
-            document.getElementById('buildButtons').appendChild(button);
-        }
-    }
+    uiManager: uiManager,
 };
 
 // After the gameState object
@@ -59,6 +56,15 @@ setInterval(() => {
     for (let producer of producers) {
         producer.produce();
     }
+    // Update the display
+    gameState.uiManager.updateDisplay(resources, buildingManager);
+    gameState.uiManager.updateBuildingDisplay(buildingManager.builtBuildings);
+
+    // Generate build buttons
+    if (!areButtonsGenerated) {
+        gameState.uiManager.generateBuildButtons(producers, buildingManager);
+        areButtonsGenerated = true;
+    }
 }, 1000);
 
 // Pass gameState to producers
@@ -68,8 +74,5 @@ for (let producer of producers) {
 
 // Pass gameState to buildingQueue
 buildingQueue.setGameState(gameState);
-
-// Generate build buttons
-gameState.generateBuildButtons();
 
 export default gameState;
