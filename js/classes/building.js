@@ -11,6 +11,7 @@ class Building {
             baseCost: resourceObj.baseCost,
             amount: resourceObj.baseCost
         }));
+        this.remainingTime = this.constructionTime;
     }
 
     setGameState(gameState) {
@@ -24,6 +25,7 @@ class Building {
     build() {
         if (this.hasSufficientResources() && this.gameState.buildingManager.hasSufficientSpace(this)) {
             if (this.gameState.buildingQueue.addToQueue(this)) {
+                this.remainingTime = this.constructionTime;
                 this.subtractResourcesForBuilding();
                 this.gameState.gameLog.info(`Added ${this.name} to the building queue.`);
             } else {
