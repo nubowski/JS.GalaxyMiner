@@ -77,7 +77,8 @@ for (let producer of producers) {
     producer.setGameState(gameState);
 }
 
-// Pass gameState to buildingQueue
+// Pass gameState
+buildingManager.setGameState(gameState);
 buildingQueue.setGameState(gameState);
 
 export default gameState;

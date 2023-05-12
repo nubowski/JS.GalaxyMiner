@@ -15,7 +15,10 @@ class BuildingQueue {
     onTimer() {
         if (this.queue.length > 0) {
             let building = this.queue[0];
-            building.remainingTime -= 1000; // assuming the TimerManager interval is 1000 ms
+            console.log(`Before decrement: ${building.remainingTime}`);
+            building.remainingTime -= this.gameState.timerManager.tickInterval;
+            console.log(`After decrement: ${building.remainingTime}`);
+
             if (building.remainingTime <= 0) {
                 this.removeFromQueue();
             }
@@ -26,6 +29,7 @@ class BuildingQueue {
         console.log(`Current queue size: ${this.queue.length}, Max queue size: ${this.maxSize}`);
         if (this.queue.length < this.maxSize) {
             building.remainingTime = building.constructionTime; // initialize remaining time
+            console.log(`Added ${building.name} to queue with remaining time: ${building.remainingTime}`);
             this.queue.push(building);
             return true;
         } else {
@@ -35,9 +39,9 @@ class BuildingQueue {
 
     removeFromQueue () {
         if (this.queue.length > 0) {
-            return this.queue.shift();
-        } else {
-            return null;
+            let building = this.queue.shift();
+            // Pass the completed building to the BuildingManager
+            this.gameState.buildingManager.addBuilding(building);
         }
     }
 
