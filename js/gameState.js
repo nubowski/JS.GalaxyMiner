@@ -2,6 +2,7 @@ import Resource from './classes/resource.js';
 import Producer from "./classes/producer.js";
 import GameLog from "./classes/gameLog.js";
 import Building from "./classes/building.js";
+import TimerManager from "./classes/timerManager.js";
 import BuildingManager from './classes/buildingManager.js';
 import BuildingQueue from "./classes/buildingQueue.js";
 import UImanager from "./classes/UImanager.js";
@@ -11,6 +12,7 @@ let uiManager = new UImanager();
 let gameLog = new GameLog();
 let buildingManager = new BuildingManager();
 let buildingQueue = new BuildingQueue();
+let timerManager = new TimerManager();
 let areButtonsGenerated = false;
 
 // Init resources
@@ -40,39 +42,43 @@ let gameState = {
     producers: producers,
     buildings: buildings,
     uiManager: uiManager,
+    timerManager: timerManager,
 };
 
-// After the gameState object
-setInterval(() => {
-    // Check if there's a building in the queue
-    if (buildingQueue.getQueueLength() > 0) {
-        // Check if the building can be built
-        if (buildingManager.canBuild(buildingQueue.getNextBuilding())) {
-            // Add the building to the building manager
-            buildingManager.startBuilding(buildingQueue.removeFromQueue());
+timerManager.register({
+    onTimer: function() {
+        // Check if there's a building in the queue
+        if (buildingQueue.getQueueLength() > 0) {
+            // Check if the building can be built
+            if (buildingManager.canBuild(buildingQueue.getNextBuilding())) {
+                // DO NOTHING, let buildingQueue handle the construction
+            }
+        }
+        // Update the producers
+        for (let producer of producers) {
+            producer.produce();
+        }
+        // Update the display
+        gameState.uiManager.updateDisplay(resources, buildingManager);
+        gameState.uiManager.updateBuildingDisplay(buildingManager.getBuiltBuildings());
+
+        // Generate build buttons
+        if (!areButtonsGenerated) {
+            gameState.uiManager.generateBuildButtons(producers, buildingManager);
+            areButtonsGenerated = true;
         }
     }
-    // Update the producers
-    for (let producer of producers) {
-        producer.produce();
-    }
-    // Update the display
-    gameState.uiManager.updateDisplay(resources, buildingManager);
-    gameState.uiManager.updateBuildingDisplay(buildingManager.getBuiltBuildings());
+});
 
-    // Generate build buttons
-    if (!areButtonsGenerated) {
-        gameState.uiManager.generateBuildButtons(producers, buildingManager);
-        areButtonsGenerated = true;
-    }
-}, 1000);
+timerManager.start();  // Start the TimerManager
 
 // Pass gameState to producers
 for (let producer of producers) {
     producer.setGameState(gameState);
 }
 
-// Pass gameState to buildingQueue
+// Pass gameState
+buildingManager.setGameState(gameState);
 buildingQueue.setGameState(gameState);
 
 export default gameState;
