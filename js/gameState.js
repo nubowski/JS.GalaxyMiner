@@ -37,6 +37,22 @@ let gameState = {
     buildings: buildings
 };
 
+// After the gameState object
+setInterval(() => {
+    // Check if there's a building in the queue
+    if (buildingQueue.getQueueLength() > 0) {
+        // Check if the building can be built
+        if (buildingManager.canBuild(buildingQueue.getNextBuilding())) {
+            // Add the building to the building manager
+            buildingManager.addBuilding(buildingQueue.removeFromQueue());
+        }
+    }
+    // Update the producers
+    for (let producer of producers) {
+        producer.produce();
+    }
+}, 1000);
+
 // Pass gameState to producers
 for (let producer of producers) {
     producer.setGameState(gameState);
