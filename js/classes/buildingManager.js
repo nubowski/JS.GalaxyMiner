@@ -13,6 +13,10 @@ class BuildingManager {
         this.buildingTimer = null;
     }
 
+    setGameState(gameState) {
+        this.gameState = gameState;
+    }
+
     getBuiltBuildings() {
         return this.builtBuildings;
     }
@@ -21,50 +25,31 @@ class BuildingManager {
         return this.currentBuilding;
     }
 
-    startBuilding(building) {
-        if (this.currentBuilding === null && this.canBuild(building)) {
-            this.currentBuilding = building;
-            this.buildingTimer = setTimeout(() => {
-                this.addBuilding(this.currentBuilding);
-                this.currentBuilding = null;
-                if (this.constructionQueue.length > 0) {
-                    this.startBuilding(this.constructionQueue.shift());
-                }
-            }, building.constructionTime);
-        } else {
-            this.queueBuilding(building);
-        }
-    }
-
     canBuild(building) {
         return (this.usedSpaces + this.reservedSpaces + building.space) <= this.maxSpaces;
     }
 
-    reserveSpace(building) {
-        if (this.canBuild(building)) {
-            this.reservedSpaces += building.space;
-            return true;
-        }
-        return false;
-    }
 
     addBuilding(building, initialLevel = DEFAULT_BUILDING_LEVEL) {
         if (building === null) {
             console.log("addBuilding: building is NULL")
             return false;
         }
-        if (this.reserveSpace(building)) {
-            this.buildings.push(building);
-            this.builtBuildings.push(building);
-            this.usedSpaces += building.space;
-            this.reservedSpaces -= building.space;
-            building.setLevel(initialLevel);
-            return true;
-        } else {
-            this.queueBuilding(building);
-            return false;
+        this.buildings.push(building);
+        this.builtBuildings.push(building);
+        this.usedSpaces += building.space;
+        this.reservedSpaces -= building.space;
+        building.setLevel(initialLevel);
+        this.gameState.uiManager.updateBuildingDisplay(this.getBuiltBuildings());
+
+        if (this.currentBuilding === null && this.constructionQueue.length > 0) {
+            this.currentBuilding = this.constructionQueue.shift();
         }
+
+        return true;
     }
+
+    // Remove startBuilding(), reserveSpace(), queueBuilding(), buildNextInQueue() - these are handled by Building and BuildingQueue
 
     hasSufficientSpace(building) {
         return this.canBuild(building);
@@ -78,19 +63,6 @@ class BuildingManager {
             return true;
         }
         return false;
-    }
-
-    queueBuilding(building) {
-        this.constructionQueue.push(building);
-    }
-
-    buildNextInQueue() {
-        if (this.constructionQueue.length > 0) {
-            const nextBuilding = this.constructionQueue[0];
-            if (this.addBuilding((nextBuilding))) {
-                this.constructionQueue.shift();
-            }
-        }
     }
 }
 
