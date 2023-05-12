@@ -1,12 +1,19 @@
+import {DEFAULT_QUEUE_SIZE} from "./constants.js";
 
 
 class BuildingQueue {
-    constructor() {
+    constructor(maxSize = DEFAULT_QUEUE_SIZE) {
         this.queue = [];
+        this.maxSize = maxSize;
     }
 
     addToQueue(building) {
-        this.queue.push(building);
+        if (this.queue.length < this.maxSize) {
+            this.queue.push(building);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     removeFromQueue () {
@@ -18,6 +25,10 @@ class BuildingQueue {
 
     getNextBuilding() {
         return this.queue[0];
+    }
+
+    increaseSize(amount) {
+        this.maxSize += amount;
     }
 }
 

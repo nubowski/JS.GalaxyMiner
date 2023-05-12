@@ -2,12 +2,12 @@ import Resource from './classes/resource.js';
 import Producer from "./classes/producer.js";
 import GameLog from "./classes/gameLog.js";
 import BuildingManager from './classes/buildingManager.js';
+import BuildingQueue from "./classes/buildingQueue.js";
 
-// Init game log
+// Inits
 let gameLog = new GameLog();
-
-// Init building manager
 let buildingManager = new BuildingManager();
+let buildingQueue = new BuildingQueue();
 
 // Init resources
 let metal = new Resource('Metal', 0);

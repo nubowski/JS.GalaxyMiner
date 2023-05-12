@@ -1,6 +1,6 @@
-import GameLog from "./gameLog.js";
-
 import {UPGRADE_COST_MULTIPLIER} from "./constants.js";
+
+import GameLog from "./gameLog.js";
 
 // Init GameLog info
 let gameLog = new GameLog();
