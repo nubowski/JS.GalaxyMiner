@@ -14,8 +14,8 @@ let buildingQueue = new BuildingQueue();
 let areButtonsGenerated = false;
 
 // Init resources
-let metal = new Resource('Metal', 0);
-let carbon = new Resource('Carbon', 0);
+let metal = new Resource('Metal', 1000);
+let carbon = new Resource('Carbon', 1000);
 
 // Init producers (name, space, level, constructionTime, resourceType, productionRate, cost)
 let metalDrill = new Producer('Metal Drill', 2, 1, 10000, metal, 1, [

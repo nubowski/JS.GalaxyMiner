@@ -21,19 +21,19 @@ class Building {
         this.level = level;
     }
 
-    build(buildingManager) {
-        if (this.hasSufficientResources() && buildingManager.hasSufficientSpace(this)) {
+    build() {
+        if (this.hasSufficientResources() && this.gameState.buildingManager.hasSufficientSpace(this)) {
             if (this.gameState.buildingQueue.addToQueue(this)) {
                 this.subtractResourcesForBuilding();
-                this.gameState.gameLog.info(`Started construction of ${this.name}!`);
+                this.gameState.gameLog.info(`Added ${this.name} to the building queue.`);
             } else {
-                this.gameState.gameLog.error("Unexpected Error!");
+                this.gameState.gameLog.error("Building queue is full!");
             }
         } else {
             if (!this.hasSufficientResources()) {
                 this.gameState.gameLog.negative("Insufficient resources to build!")
             }
-            if (!buildingManager.hasSufficientSpace(this)) {
+            if (!this.gameState.buildingManager.hasSufficientSpace(this)) {
                 this.gameState.gameLog.negative("Not enough space to build!");
             }
         }

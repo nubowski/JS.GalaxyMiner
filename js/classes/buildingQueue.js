@@ -13,8 +13,9 @@ class BuildingQueue {
     addToQueue(building) {
         if (this.queue.length < this.maxSize) {
             this.queue.push(building);
+            // start a timer if this is the only building in the queue
             if (this.queue.length === 1) {
-                this.startTimer(building);
+                this.startTimer();
             }
             return true;
         } else {
@@ -22,15 +23,18 @@ class BuildingQueue {
         }
     }
 
-    startTimer(building) {
+    startTimer() {
+        let building = this.queue[0];
         setTimeout(() => {
             // after time is up, remove the building from the queue
             this.queue.shift();
             // pull the building to the building manager
-            this.gameState.buildingManager.addBuilding(building);
+            if (building !== null) {
+                this.gameState.buildingManager.addBuilding(building);
+            }
             // if there are buildings in the queue, start the next timer
             if (this.queue.length > 0) {
-                this.startTimer(this.queue[0]);
+                this.startTimer();
             }
         }, building.constructionTime);
     }
