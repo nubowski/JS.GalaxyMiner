@@ -1,17 +1,11 @@
-import GameLog from "./gameLog.js";
-
-import {UPGRADE_COST_MULTIPLIER} from "./constants.js";
-
-// Init GameLog info
-let gameLog = new GameLog();
-
-
+import {DEFAULT_BUILDING_LEVEL, DEFAULT_CONSTRUCTION_TIME, UPGRADE_COST_MULTIPLIER} from "./constants.js";
 
 class Building {
-    constructor(name, space, cost) {
+    constructor(name, space, level = DEFAULT_BUILDING_LEVEL, constructionTime = DEFAULT_CONSTRUCTION_TIME, cost) {
         this.name = name;
         this.space = space;
         this.level = 0;
+        this.constructionTime = constructionTime;
         this.cost = cost.map(resourceObj => ({
             resource: resourceObj.resource,
             baseCost: resourceObj.baseCost,
@@ -19,30 +13,33 @@ class Building {
         }));
     }
 
+    setGameState(gameState) {
+        this.gameState = gameState;
+    }
+
     setLevel(level) {
         this.level = level;
     }
 
-    build(buildingManager) {
-        if (this.hasSufficientResources() && buildingManager.hasSufficientSpace(this)) {
-            if (buildingManager.addBuilding(this)) {
+    build() {
+        if (this.hasSufficientResources() && this.gameState.buildingManager.hasSufficientSpace(this)) {
+            if (this.gameState.buildingQueue.addToQueue(this)) {
                 this.subtractResourcesForBuilding();
-                gameLog.info(`Built ${this.name}!`);
+                this.gameState.gameLog.info(`Added ${this.name} to the building queue.`);
             } else {
-                gameLog.error("Unexpected Error!");
+                this.gameState.gameLog.error("Building queue is full!");
             }
         } else {
             if (!this.hasSufficientResources()) {
-                gameLog.negative("Insufficient resources to build!")
+                this.gameState.gameLog.negative("Insufficient resources to build!")
             }
-            if (!buildingManager.hasSufficientSpace(this)) {
-                gameLog.negative("Not enough space to build!");
+            if (!this.gameState.buildingManager.hasSufficientSpace(this)) {
+                this.gameState.gameLog.negative("Not enough space to build!");
             }
         }
     }
 
     upgrade() {
-        // Increase level and subtract upgrade cost from player's resources
         let canUpgrade = true;
         for (let resourceObj of this.cost) {
             if (!resourceObj.resource.subtractQuantity(resourceObj.amount)) {
@@ -52,10 +49,10 @@ class Building {
         }
         if (canUpgrade) {
             this.level++;
-            this.updateCost();
-            gameLog.info(`Upgraded ${this.name} to level ${this.level}!`);
+            this.cost.forEach(resourceObj => resourceObj.amount *= Math.pow(UPGRADE_COST_MULTIPLIER, this.level));
+            this.gameState.gameLog.info(`Upgraded ${this.name} to level ${this.level}!`);
         } else {
-            gameLog.negative("Insufficient resources to upgrade!");
+            this.gameState.gameLog.negative("Insufficient resources to upgrade!");
         }
     }
 
