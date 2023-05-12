@@ -6,6 +6,7 @@ class Producer extends Building {
         super(name, space, level, constructionTime, cost);
         this.resourceType = resourceType;
         this.productionRate = productionRate;
+        this.underConstruction = false;
     }
 
     setGameState(gameState) {
@@ -13,9 +14,11 @@ class Producer extends Building {
     }
 
     produce() {
-        // Increase player's resource count of this.type by this.rate
-        let amount = this.productionRate;
-        this.resourceType.addQuantity(amount);
+        if (!this.underConstruction) {
+            // Increase player's resource count of this.type by this.rate
+            let amount = this.productionRate;
+            this.resourceType.addQuantity(amount);
+        }
     }
 
     upgrade() {
@@ -27,10 +30,14 @@ class Producer extends Building {
             }
         }
         if (canUpgrade) {
-            this.level++;
-            this.productionRate *= this.level;
-            this.cost.forEach(resourceObj => resourceObj.amount *= Math.pow(UPGRADE_COST_MULTIPLIER, this.level));
-            this.gameState.gameLog.info(`Upgraded ${this.name} to level ${this.level}!`);
+            this.underConstruction = true;
+            setTimeout(() => {
+                this.underConstruction = false;
+                this.level++;
+                this.productionRate *= this.level;
+                this.cost.forEach(resourceObj => resourceObj.amount *= Math.pow(UPGRADE_COST_MULTIPLIER, this.level));
+                this.gameState.gameLog.info(`Upgraded ${this.name} to level ${this.level}!`);
+            }, this.constructionTime);
         } else {
             this.gameState.gameLog.negative("Insufficient resources to upgrade!");
         }
