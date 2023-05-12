@@ -22,12 +22,17 @@ class BuildingManager {
     }
 
     startBuilding(building) {
-        if (this.canBuild(building)) {
+        if (this.currentBuilding === null && this.canBuild(building)) {
             this.currentBuilding = building;
             this.buildingTimer = setTimeout(() => {
                 this.addBuilding(this.currentBuilding);
                 this.currentBuilding = null;
+                if (this.constructionQueue.length > 0) {
+                    this.startBuilding(this.constructionQueue.shift());
+                }
             }, building.constructionTime);
+        } else {
+            this.queueBuilding(building);
         }
     }
 
@@ -44,6 +49,10 @@ class BuildingManager {
     }
 
     addBuilding(building, initialLevel = DEFAULT_BUILDING_LEVEL) {
+        if (building === null) {
+            console.log("addBuilding: building is NULL")
+            return false;
+        }
         if (this.reserveSpace(building)) {
             this.buildings.push(building);
             this.builtBuildings.push(building);
