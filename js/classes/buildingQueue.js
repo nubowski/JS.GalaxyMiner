@@ -5,36 +5,31 @@ class BuildingQueue {
         console.log(`Initial max queue size: ${maxSize}`);
         this.queue = [];
         this.maxSize = maxSize;
-        this.isAdding = false; // try for lock
     }
 
     setGameState(gameState) {
         this.gameState = gameState;
+        this.gameState.timerManager.register(this);
+    }
+
+    onTimer() {
+        if (this.queue.length > 0) {
+            let building = this.queue[0];
+            building.remainingTime -= 1000; // assuming the TimerManager interval is 1000 ms
+            if (building.remainingTime <= 0) {
+                this.removeFromQueue();
+            }
+        }
     }
 
     addToQueue(building) {
         console.log(`Current queue size: ${this.queue.length}, Max queue size: ${this.maxSize}`);
         if (this.queue.length < this.maxSize) {
+            building.remainingTime = building.constructionTime; // initialize remaining time
             this.queue.push(building);
-            // start a timer if this is the only building in the queue
-            if (this.queue.length === 1) {
-                this.startTimer(building);
-            }
             return true;
         } else {
             return false;
-        }
-    }
-
-    startTimer() {
-        let building = this.queue[0];
-        if (building !== null) {
-            setTimeout(() => {
-                this.removeFromQueue();
-                if (this.queue.length > 0) {
-                    this.startTimer();
-                }
-            }, building.constructionTime);
         }
     }
 

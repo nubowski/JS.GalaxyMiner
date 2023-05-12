@@ -51,8 +51,7 @@ timerManager.register({
         if (buildingQueue.getQueueLength() > 0) {
             // Check if the building can be built
             if (buildingManager.canBuild(buildingQueue.getNextBuilding())) {
-                // Add the building to the building manager
-                buildingManager.startBuilding(buildingQueue.removeFromQueue());
+                // DO NOTHING, let buildingQueue handle the construction
             }
         }
         // Update the producers
