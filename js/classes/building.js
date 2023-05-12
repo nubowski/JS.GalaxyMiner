@@ -1,4 +1,4 @@
-import {UPGRADE_COST_MULTIPLIER} from "./constants.js";
+import {DEFAULT_BUILDING_LEVEL, DEFAULT_CONSTRUCTION_TIME, UPGRADE_COST_MULTIPLIER} from "./constants.js";
 
 import GameLog from "./gameLog.js";
 
@@ -8,10 +8,11 @@ let gameLog = new GameLog();
 
 
 class Building {
-    constructor(name, space, cost) {
+    constructor(name, space, level = DEFAULT_BUILDING_LEVEL, constructionTime = DEFAULT_CONSTRUCTION_TIME, cost) {
         this.name = name;
         this.space = space;
         this.level = 0;
+        this.constructionTime = constructionTime;
         this.cost = cost.map(resourceObj => ({
             resource: resourceObj.resource,
             baseCost: resourceObj.baseCost,
