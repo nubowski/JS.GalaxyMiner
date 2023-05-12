@@ -61,6 +61,20 @@ class UImanager {
         }
     }
 
+    updateQueueDisplay(queue) {
+        let queueDisplay = document.getElementById('queueDisplay');
+        if (!queueDisplay) {
+            queueDisplay = document.createElement('div');
+            queueDisplay.id ='queueDisplay';
+            document.body.appendChild(queueDisplay);
+        }
+        queueDisplay.innerHTML = '';
+        for (let i = 0; i < queue.length; i++) {
+            let building = queue[i];
+            queueDisplay.innerHTML += `Building: ${building.name} - Remaining time: ${building.remainingTime}<br>`;
+        }
+    }
+
 }
 
 export default UImanager;
