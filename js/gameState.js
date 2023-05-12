@@ -49,7 +49,7 @@ setInterval(() => {
         // Check if the building can be built
         if (buildingManager.canBuild(buildingQueue.getNextBuilding())) {
             // Add the building to the building manager
-            buildingManager.addBuilding(buildingQueue.removeFromQueue());
+            buildingManager.startBuilding(buildingQueue.removeFromQueue());
         }
     }
     // Update the producers
@@ -58,7 +58,7 @@ setInterval(() => {
     }
     // Update the display
     gameState.uiManager.updateDisplay(resources, buildingManager);
-    gameState.uiManager.updateBuildingDisplay(buildingManager.builtBuildings);
+    gameState.uiManager.updateBuildingDisplay(buildingManager.getBuiltBuildings());
 
     // Generate build buttons
     if (!areButtonsGenerated) {

@@ -23,9 +23,9 @@ class Building {
 
     build(buildingManager) {
         if (this.hasSufficientResources() && buildingManager.hasSufficientSpace(this)) {
-            if (buildingManager.addBuilding(this)) {
+            if (this.gameState.buildingQueue.addToQueue(this)) {
                 this.subtractResourcesForBuilding();
-                this.gameState.gameLog.info(`Built ${this.name}!`);
+                this.gameState.gameLog.info(`Started construction of ${this.name}!`);
             } else {
                 this.gameState.gameLog.error("Unexpected Error!");
             }

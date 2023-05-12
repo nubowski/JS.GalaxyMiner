@@ -21,6 +21,7 @@ class Producer extends Building {
         }
     }
 
+    // Override for the buildings.upgrade
     upgrade() {
         let canUpgrade = true;
         for (let resourceObj of this.cost) {

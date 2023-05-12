@@ -9,10 +9,26 @@ class BuildingManager {
         this.buildings = [];
         this.constructionQueue = [];
         this.builtBuildings = [];
+        this.currentBuilding = null;
+        this.buildingTimer = null;
     }
 
     getBuiltBuildings() {
         return this.builtBuildings;
+    }
+
+    getCurrentBuilding() {
+        return this.currentBuilding;
+    }
+
+    startBuilding(building) {
+        if (this.canBuild(building)) {
+            this.currentBuilding = building;
+            this.buildingTimer = setTimeout(() => {
+                this.addBuilding(this.currentBuilding);
+                this.currentBuilding = null;
+            }, building.constructionTime);
+        }
     }
 
     canBuild(building) {
