@@ -42,7 +42,6 @@ class Building {
     }
 
     upgrade() {
-        // Increase level and subtract upgrade cost from player's resources
         let canUpgrade = true;
         for (let resourceObj of this.cost) {
             if (!resourceObj.resource.subtractQuantity(resourceObj.amount)) {
@@ -52,7 +51,7 @@ class Building {
         }
         if (canUpgrade) {
             this.level++;
-            this.updateCost();
+            this.cost.forEach(resourceObj => resourceObj.amount *= Math.pow(UPGRADE_COST_MULTIPLIER, this.level));
             gameLog.info(`Upgraded ${this.name} to level ${this.level}!`);
         } else {
             gameLog.negative("Insufficient resources to upgrade!");
