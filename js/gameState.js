@@ -34,7 +34,15 @@ let gameState = {
     buildingQueue: buildingQueue,
     resources: resources,
     producers: producers,
-    buildings: buildings
+    buildings: buildings,
+    generateBuildButtons: function() {
+        for (let producer of this.producers) {
+            let button = document.createElement('button');
+            button.innerHTML = `Build ${producer.name}`;
+            button.onclick = () => producer.build(this.buildingManager);
+            document.getElementById('buildButtons').appendChild(button);
+        }
+    }
 };
 
 // After the gameState object
@@ -60,5 +68,8 @@ for (let producer of producers) {
 
 // Pass gameState to buildingQueue
 buildingQueue.setGameState(gameState);
+
+// Generate build buttons
+gameState.generateBuildButtons();
 
 export default gameState;
