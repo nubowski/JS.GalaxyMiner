@@ -1,3 +1,4 @@
+import createBuilding from "./buildingFactory.js";
 
 class UImanager {
     constructor() {}
@@ -29,13 +30,15 @@ class UImanager {
         this.updateSpaceDisplay(buildingManager);
     }
 
-    generateBuildButtons(producers, buildingManager) {
+    generateBuildButtons(buildingData, buildingManager, buildingQueue) {
         const container = document.getElementById('buttonContainer');
-        for (let producer of producers) {
+        for (let buildingName in buildingData) {
             let button = document.createElement('button');
-            button.textContent = `Build ${producer.name}`;
+            button.textContent = `Build ${buildingName}`;
             button.onclick = () => {
-                producer.build(buildingManager);
+                let buildingInfo = buildingData[buildingName];
+                let building = createBuilding(buildingInfo.type, buildingInfo);
+                buildingQueue.addToQueue(building);
             }
             container.appendChild(button);
         }
