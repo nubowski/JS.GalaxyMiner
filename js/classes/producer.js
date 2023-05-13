@@ -10,6 +10,7 @@ class Producer extends Building {
     }
 
     setGameState(gameState) {
+        console.log("Setting gameState in Producer", gameState);
         this.gameState = gameState;
     }
 
@@ -23,24 +24,20 @@ class Producer extends Building {
 
     // Override for the buildings.upgrade
     upgrade() {
-        let canUpgrade = true;
-        for (let resourceObj of this.cost) {
-            if (!resourceObj.resource.subtractQuantity(resourceObj.amount)) {
-                canUpgrade = false;
-                break;
+        console.log("gameState in upgrade", this.gameState);
+        if (this.hasSufficientResources() && !this.underConstruction) {
+            if (this.gameState.buildingQueue.addToQueue(this, 'upgrade')) {
+                this.gameState.gameLog.info(`Upgrade of ${this.name} has been added to the building queue.`);
+            } else {
+                this.gameState.gameLog.error("Building queue is full!");
             }
-        }
-        if (canUpgrade) {
-            this.underConstruction = true;
-            setTimeout(() => {
-                this.underConstruction = false;
-                this.level++;
-                this.productionRate *= this.level;
-                this.cost.forEach(resourceObj => resourceObj.amount *= Math.pow(UPGRADE_COST_MULTIPLIER, this.level));
-                this.gameState.gameLog.info(`Upgraded ${this.name} to level ${this.level}!`);
-            }, this.constructionTime);
         } else {
-            this.gameState.gameLog.negative("Insufficient resources to upgrade!");
+            if (!this.hasSufficientResources()) {
+                this.gameState.gameLog.negative("Insufficient resources to upgrade!")
+            }
+            if (this.underConstruction) {
+                this.gameState.gameLog.negative("The building is currently under construction!");
+            }
         }
     }
 }

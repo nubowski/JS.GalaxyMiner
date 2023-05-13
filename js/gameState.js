@@ -37,7 +37,7 @@ let gameState = {
 timerManager.register({
     onTimer: function() {
         // Produce resources from each Producer
-        for (let building of buildings) {
+        for (let building of gameState.buildings) {
             if (building instanceof Producer) {
                 building.produce();
             }
@@ -48,7 +48,7 @@ timerManager.register({
 
         // Generate build buttons
         if (!areButtonsGenerated) {
-            gameState.uiManager.generateBuildButtons(buildingData, buildingManager, gameState.buildingQueue);
+            gameState.uiManager.generateBuildButtons(buildingData, buildingManager, gameState.buildingQueue, resources);
             areButtonsGenerated = true;
         }
     }

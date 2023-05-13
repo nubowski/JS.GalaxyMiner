@@ -30,6 +30,7 @@ class BuildingQueue {
         if (this.canAddToQueue(building)) {
             building.remainingTime = building.constructionTime; // initialize remaining time
             this.queue.push(building);
+            building.subtractResourcesForBuilding(); // subtract resources
             this.gameState.buildingManager.reserveSpace(building);
             this.gameState.uiManager.updateQueueDisplay(this.queue);
             return true;
