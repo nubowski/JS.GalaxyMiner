@@ -37,7 +37,7 @@ let gameState = {
 timerManager.register({
     onTimer: function() {
         // Produce resources from each Producer
-        for (let building of buildings) {
+        for (let building of gameState.buildings) {
             if (building instanceof Producer) {
                 building.produce();
             }
