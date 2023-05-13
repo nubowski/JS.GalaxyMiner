@@ -58,6 +58,10 @@ class BuildingQueue {
     increaseSize(amount) {
         this.maxSize += amount;
     }
+
+    getQueue() {
+        return this.queue;
+    }
 }
 
 export default BuildingQueue;
