@@ -7,10 +7,7 @@ class BuildingManager {
         this.usedSpaces = 0;
         this.reservedSpaces = 0;
         this.buildings = [];
-        this.constructionQueue = [];
         this.builtBuildings = [];
-        this.currentBuilding = null;
-        this.buildingTimer = null;
     }
 
     setGameState(gameState) {
@@ -21,38 +18,26 @@ class BuildingManager {
         return this.builtBuildings;
     }
 
-    getCurrentBuilding() {
-        return this.currentBuilding;
+    canReserveSpace(building) {
+        return (this.usedSpaces + this.reservedSpaces + building.space) <= this.maxSpaces;
     }
 
-    canBuild(building) {
-        return (this.usedSpaces + this.reservedSpaces + building.space) <= this.maxSpaces;
+    reserveSpace(building) {
+        if (this.canReserveSpace(building)) {
+            this.reservedSpaces += building.space;
+            return true;
+        }
+        return false;
     }
 
 
     addBuilding(building, initialLevel = DEFAULT_BUILDING_LEVEL) {
-        if (building === null) {
-            console.log("addBuilding: building is NULL")
-            return false;
-        }
         this.buildings.push(building);
         this.builtBuildings.push(building);
         this.usedSpaces += building.space;
         this.reservedSpaces -= building.space;
         building.setLevel(initialLevel);
         this.gameState.uiManager.updateBuildingDisplay(this.getBuiltBuildings());
-
-        if (this.currentBuilding === null && this.constructionQueue.length > 0) {
-            this.currentBuilding = this.constructionQueue.shift();
-        }
-
-        return true;
-    }
-
-    // Remove startBuilding(), reserveSpace(), queueBuilding(), buildNextInQueue() - these are handled by Building and BuildingQueue
-
-    hasSufficientSpace(building) {
-        return this.canBuild(building);
     }
 
     removeBuilding(building) {
@@ -64,6 +49,14 @@ class BuildingManager {
         }
         return false;
     }
-}
+
+    startBuilding () {
+        let building = this.gameState.buildingQueue.getNextBuilding();
+        if (building) {
+            building.startBuilding();
+            this.gameState.uiManager.updateQueueDisplay(this.gameState.buildingQueue.getQueue());
+        }
+    }
+ }
 
 export default BuildingManager;

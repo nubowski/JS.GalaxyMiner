@@ -2,7 +2,6 @@ import {DEFAULT_QUEUE_SIZE} from "./constants.js";
 
 class BuildingQueue {
     constructor(maxSize = DEFAULT_QUEUE_SIZE) {
-        console.log(`Initial max queue size: ${maxSize}`);
         this.queue = [];
         this.maxSize = maxSize;
     }
@@ -15,9 +14,7 @@ class BuildingQueue {
     onTimer() {
         if (this.queue.length > 0) {
             let building = this.queue[0];
-            console.log(`Before decrement: ${building.remainingTime}`);
             building.remainingTime -= this.gameState.timerManager.tickInterval;
-            console.log(`After decrement: ${building.remainingTime}`);
 
             if (building.remainingTime <= 0) {
                 this.removeFromQueue();
@@ -25,12 +22,15 @@ class BuildingQueue {
         }
     }
 
+    canAddToQueue(building) {
+        return this.queue.length < this.maxSize && this.gameState.buildingManager.canReserveSpace(building);
+    }
+
     addToQueue(building) {
-        console.log(`Current queue size: ${this.queue.length}, Max queue size: ${this.maxSize}`);
-        if (this.queue.length < this.maxSize) {
+        if (this.canAddToQueue(building)) {
             building.remainingTime = building.constructionTime; // initialize remaining time
-            console.log(`Added ${building.name} to queue with remaining time: ${building.remainingTime}`);
             this.queue.push(building);
+            this.gameState.buildingManager.reserveSpace(building);
             this.gameState.uiManager.updateQueueDisplay(this.queue);
             return true;
         } else {
@@ -57,6 +57,10 @@ class BuildingQueue {
 
     increaseSize(amount) {
         this.maxSize += amount;
+    }
+
+    getQueue() {
+        return this.queue;
     }
 }
 
