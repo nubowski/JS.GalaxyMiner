@@ -90,3 +90,66 @@ button {
 .negative {
     color: orange;
 }
+
+#queueDisplay {
+    background-color: #444;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
+
+#building-queue {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.bqueue-item {
+    width: 100px;
+    height: 100px;
+    background-color: #666;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+}
+
+#buildings-container {
+    background-color: #444;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+#built-buildings {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.built-building {
+    width: 100px;
+    height: 100px;
+    background-color: #888;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+}
+
+.building-wrapper {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.building-wrapper:last-child {
+    margin-right: 0;
+}
+
+.building-wrapper button {
+    display: block;
+    margin-top: 5px;
+}
