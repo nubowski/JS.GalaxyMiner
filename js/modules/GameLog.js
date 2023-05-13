@@ -1,10 +1,19 @@
-import {MAX_LOG_ENTRIES} from "./constants.js";
+import {MAX_LOG_ENTRIES} from "../data/constants.js";
+
+import eventBus from "../eventBus/EventBus.js";
 
 class GameLog {
     constructor(maxEntries = MAX_LOG_ENTRIES) {
         this.maxEntries = maxEntries;
         this.logEntries = [];
         this.logElement = document.getElementById('game-log');
+
+        eventBus.on('log.error', message => this.error(message));
+        eventBus.on('log.info', message => this.error(message));
+        eventBus.on('log.debug', message => this.error(message));
+        eventBus.on('log.positive', message => this.error(message));
+        eventBus.on('log.negative', message => this.error(message));
+
     }
 
     error(message) {

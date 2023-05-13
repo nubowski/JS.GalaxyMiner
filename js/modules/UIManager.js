@@ -1,7 +1,15 @@
-import createBuilding from "./buildingFactory.js";
+import eventBus from "../eventBus/EventBus.js";
+import createBuilding from "../utils/buildingFactory";
+
+
 
 class UImanager {
-    constructor() {}
+    constructor() {
+        eventBus.on('resourceUpdated', (resources) => this.updateResourceDisplay(resources));
+        eventBus.on('buildingSpaceUpdated', (buildingManager) => this.updateSpaceDisplay(buildingManager));
+        eventBus.on('buildingUpdated', (buildings) => this.updateBuildingDisplay(buildings));
+        eventBus.on('queueUpdated', (queue) => this.updateQueueDisplay(queue));
+    }
 
     updateResourceDisplay(resources) {
         for (let resource of resources) {

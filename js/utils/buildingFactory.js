@@ -1,5 +1,5 @@
-import Building from "./building.js";
-import Producer from "./producer.js";
+import Building from "../modules/Building.js";
+import Producer from "../modules/Producer.js";
 
 const createBuilding = (type, options, resources) => {
     // Replace resource names in cost array with actual Resource instances
