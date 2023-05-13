@@ -1,3 +1,4 @@
+import createBuilding from "./buildingFactory.js";
 
 class UImanager {
     constructor() {}
@@ -29,13 +30,15 @@ class UImanager {
         this.updateSpaceDisplay(buildingManager);
     }
 
-    generateBuildButtons(producers, buildingManager) {
+    generateBuildButtons(buildingData, buildingManager, buildingQueue) {
         const container = document.getElementById('buttonContainer');
-        for (let producer of producers) {
+        for (let buildingName in buildingData) {
             let button = document.createElement('button');
-            button.textContent = `Build ${producer.name}`;
+            button.textContent = `Build ${buildingName}`;
             button.onclick = () => {
-                producer.build(buildingManager);
+                let buildingInfo = buildingData[buildingName];
+                let building = createBuilding(buildingInfo.type, buildingInfo);
+                buildingQueue.addToQueue(building);
             }
             container.appendChild(button);
         }
@@ -58,6 +61,20 @@ class UImanager {
             buildingDiv.appendChild(upgradeButton);
 
             container.appendChild(buildingDiv);
+        }
+    }
+
+    updateQueueDisplay(queue) {
+        let queueDisplay = document.getElementById('queueDisplay');
+        if (!queueDisplay) {
+            queueDisplay = document.createElement('div');
+            queueDisplay.id ='queueDisplay';
+            document.body.appendChild(queueDisplay);
+        }
+        queueDisplay.innerHTML = '';
+        for (let i = 0; i < queue.length; i++) {
+            let building = queue[i];
+            queueDisplay.innerHTML += `Building: ${building.name} - Remaining time: ${building.remainingTime}<br>`;
         }
     }
 

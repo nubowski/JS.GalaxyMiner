@@ -2,8 +2,8 @@ import {DEFAULT_BUILDING_LEVEL, DEFAULT_CONSTRUCTION_TIME, UPGRADE_COST_MULTIPLI
 import Building from "./building.js";
 
 class Producer extends Building {
-    constructor(name, space, level = DEFAULT_BUILDING_LEVEL, constructionTime = DEFAULT_CONSTRUCTION_TIME, resourceType, productionRate, cost) {
-        super(name, space, level, constructionTime, cost);
+    constructor({name, space, resourceType, productionRate, cost, level = DEFAULT_BUILDING_LEVEL, constructionTime = DEFAULT_CONSTRUCTION_TIME}) {
+        super({name, space, cost, level, constructionTime});
         this.resourceType = resourceType;
         this.productionRate = productionRate;
         this.underConstruction = false;

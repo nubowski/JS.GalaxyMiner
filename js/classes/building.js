@@ -1,7 +1,7 @@
 import {DEFAULT_BUILDING_LEVEL, DEFAULT_CONSTRUCTION_TIME, UPGRADE_COST_MULTIPLIER} from "./constants.js";
 
 class Building {
-    constructor(name, space, level = DEFAULT_BUILDING_LEVEL, constructionTime = DEFAULT_CONSTRUCTION_TIME, cost) {
+    constructor({ name, space, cost, level = DEFAULT_BUILDING_LEVEL, constructionTime = DEFAULT_CONSTRUCTION_TIME }) {
         this.name = name;
         this.space = space;
         this.level = 0;
@@ -11,6 +11,7 @@ class Building {
             baseCost: resourceObj.baseCost,
             amount: resourceObj.baseCost
         }));
+        this.remainingTime = this.constructionTime;
     }
 
     setGameState(gameState) {
@@ -24,6 +25,7 @@ class Building {
     build() {
         if (this.hasSufficientResources() && this.gameState.buildingManager.hasSufficientSpace(this)) {
             if (this.gameState.buildingQueue.addToQueue(this)) {
+                this.remainingTime = this.constructionTime;
                 this.subtractResourcesForBuilding();
                 this.gameState.gameLog.info(`Added ${this.name} to the building queue.`);
             } else {
