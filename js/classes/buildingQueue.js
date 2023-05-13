@@ -18,7 +18,6 @@ class BuildingQueue {
 
             if (building.remainingTime <= 0) {
                 this.removeFromQueue();
-                this.gameState.buildingManager.startBuilding();
             }
         }
     }
@@ -31,7 +30,7 @@ class BuildingQueue {
         if (this.canAddToQueue(building)) {
             building.remainingTime = building.constructionTime; // initialize remaining time
             this.queue.push(building);
-            this.gameState.buildingManager.reservedSpaces(building);
+            this.gameState.buildingManager.reserveSpace(building);
             this.gameState.uiManager.updateQueueDisplay(this.queue);
             return true;
         } else {
