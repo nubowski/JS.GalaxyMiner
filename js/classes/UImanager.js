@@ -39,42 +39,44 @@ class UImanager {
                 let buildingInfo = JSON.parse(JSON.stringify(buildingData[buildingName])); // Deep copy
                 let building = createBuilding(buildingInfo.type, buildingInfo, resources);
                 buildingQueue.addToQueue(building);
-            }
+            };
             container.appendChild(button);
         }
     }
 
-    updateBuildingDisplay (buildings) {
-        const container = document.getElementById('buildings-container');
+    updateBuildingDisplay(buildings) {
+        const container = document.getElementById('built-buildings');
         container.innerHTML = '';
 
         for (let building of buildings) {
-            let buildingDiv = document.createElement('div');
-            let upgradeButton = document.createElement('button');
+            let buildingWrapper = document.createElement('div');
+            buildingWrapper.classList.add('building-wrapper');
 
-            upgradeButton.textContent = `Upgrade ${building.name}`;
+            let buildingDiv = document.createElement('div');
+            buildingDiv.classList.add('built-building');
+            buildingDiv.textContent = `${building.name} - Level: ${building.level}`;
+            buildingWrapper.appendChild(buildingDiv);
+
+            let upgradeButton = document.createElement('button');
+            upgradeButton.textContent = `Upgrade`;
             upgradeButton.onclick = () => {
                 building.upgrade();
-            }
+            };
+            buildingWrapper.appendChild(upgradeButton);
 
-            buildingDiv.textContent = `${building.name} - Level: ${building.level}`;
-            buildingDiv.appendChild(upgradeButton);
-
-            container.appendChild(buildingDiv);
+            container.appendChild(buildingWrapper);
         }
     }
 
     updateQueueDisplay(queue) {
-        let queueDisplay = document.getElementById('queueDisplay');
-        if (!queueDisplay) {
-            queueDisplay = document.createElement('div');
-            queueDisplay.id ='queueDisplay';
-            document.body.appendChild(queueDisplay);
-        }
+        let queueDisplay = document.getElementById('building-queue');
         queueDisplay.innerHTML = '';
         for (let i = 0; i < queue.length; i++) {
             let building = queue[i];
-            queueDisplay.innerHTML += `Building: ${building.name} - Remaining time: ${building.remainingTime}<br>`;
+            let queueItem = document.createElement('div');
+            queueItem.classList.add('bqueue-item');
+            queueItem.textContent = `Building: ${building.name}\nRemaining time: ${building.remainingTime}`;
+            queueDisplay.appendChild(queueItem);
         }
     }
 
