@@ -1,8 +1,3 @@
-import Resource from "./resource.js";
-
-let metal = new Resource('Metal', 1000);
-let carbon = new Resource('Carbon', 1000);
-
 const buildingData = {
     'Metal Drill': {
         type: 'Producer',
@@ -10,10 +5,10 @@ const buildingData = {
         space: 2,
         level: 1,
         constructionTime: 10000,
-        resourceType: metal,
+        resourceType: 'Metal',
         productionRate: 1,
         cost: [
-            {resource: metal, baseCost: 10}
+            {resource: 'Metal', baseCost: 10}
         ]
     },
     'Carbon Extractor': {
@@ -22,11 +17,11 @@ const buildingData = {
         space: 2,
         level: 1,
         constructionTime: 5000,
-        resourceType: carbon,
+        resourceType: 'Carbon',
         productionRate: 1,
         cost: [
-            {resource: metal, baseCost: 30},
-            {resource: carbon, baseCost: 50}
+            {resource: 'Metal', baseCost: 30},
+            {resource: 'Carbon', baseCost: 50}
         ]
     }
     // more buildings as needed
