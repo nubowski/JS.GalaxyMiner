@@ -1,4 +1,4 @@
-import {DEFAULT_QUEUE_SIZE} from "./constants.js";
+import {DEFAULT_QUEUE_SIZE} from "../data/constants.js";
 
 class BuildingQueue {
     constructor(maxSize = DEFAULT_QUEUE_SIZE) {

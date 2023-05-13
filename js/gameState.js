@@ -5,7 +5,7 @@ import TimerManager from "./classes/timerManager.js";
 import BuildingManager from './classes/buildingManager.js';
 import BuildingQueue from "./classes/buildingQueue.js";
 import UImanager from "./classes/UImanager.js";
-import buildingData from "./classes/buildingData.js";
+import buildingData from "./data/buildingData.js";
 
 // Inits
 let uiManager = new UImanager();
