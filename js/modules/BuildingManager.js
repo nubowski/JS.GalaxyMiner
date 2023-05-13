@@ -1,5 +1,5 @@
-import {MAX_BUILDING_SPACE} from "./constants.js";
-import {DEFAULT_BUILDING_LEVEL} from "./constants.js";
+import eventBus from '../eventBus/EventBus.js';
+import {MAX_BUILDING_SPACE, DEFAULT_BUILDING_LEVEL} from "../data/constants.js";
 
 class BuildingManager {
     constructor(maxSpaces = MAX_BUILDING_SPACE) {
@@ -8,10 +8,9 @@ class BuildingManager {
         this.reservedSpaces = 0;
         this.buildings = [];
         this.builtBuildings = [];
-    }
 
-    setGameState(gameState) {
-        this.gameState = gameState;
+        eventBus.on('buildingConstructed', (building) => this.addBuilding(building));
+        eventBus.on('startBuilding', () => this.startBuilding());
     }
 
     getBuiltBuildings() {
@@ -30,14 +29,13 @@ class BuildingManager {
         return false;
     }
 
-
     addBuilding(building, initialLevel = DEFAULT_BUILDING_LEVEL) {
         this.buildings.push(building);
         this.builtBuildings.push(building);
         this.usedSpaces += building.space;
         this.reservedSpaces -= building.space;
         building.setLevel(initialLevel);
-        this.gameState.uiManager.updateBuildingDisplay(this.getBuiltBuildings());
+        eventBus.emit('buildingUpdated', this.getBuiltBuildings());
     }
 
     removeBuilding(building) {
@@ -51,12 +49,8 @@ class BuildingManager {
     }
 
     startBuilding () {
-        let building = this.gameState.buildingQueue.getNextBuilding();
-        if (building) {
-            building.startBuilding();
-            this.gameState.uiManager.updateQueueDisplay(this.gameState.buildingQueue.getQueue());
-        }
+        eventBus.emit('startBuilding');
     }
- }
+}
 
 export default BuildingManager;
