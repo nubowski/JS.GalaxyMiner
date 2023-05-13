@@ -48,7 +48,7 @@ timerManager.register({
 
         // Generate build buttons
         if (!areButtonsGenerated) {
-            gameState.uiManager.generateBuildButtons(buildingData, buildingManager, gameState.buildingQueue);
+            gameState.uiManager.generateBuildButtons(buildingData, buildingManager, gameState.buildingQueue, resources);
             areButtonsGenerated = true;
         }
     }

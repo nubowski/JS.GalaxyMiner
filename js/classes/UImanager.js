@@ -30,14 +30,14 @@ class UImanager {
         this.updateSpaceDisplay(buildingManager);
     }
 
-    generateBuildButtons(buildingData, buildingManager, buildingQueue) {
+    generateBuildButtons(buildingData, buildingManager, buildingQueue, resources) {
         const container = document.getElementById('buttonContainer');
         for (let buildingName in buildingData) {
             let button = document.createElement('button');
             button.textContent = `Build ${buildingName}`;
             button.onclick = () => {
-                let buildingInfo = buildingData[buildingName];
-                let building = createBuilding(buildingInfo.type, buildingInfo);
+                let buildingInfo = JSON.parse(JSON.stringify(buildingData[buildingName])); // Deep copy
+                let building = createBuilding(buildingInfo.type, buildingInfo, resources);
                 buildingQueue.addToQueue(building);
             }
             container.appendChild(button);
