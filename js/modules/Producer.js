@@ -1,5 +1,6 @@
 import {DEFAULT_BUILDING_LEVEL, DEFAULT_CONSTRUCTION_TIME, UPGRADE_COST_MULTIPLIER} from "../data/constants";
-import Building from "./building.js";
+import Building from "./Building.js";
+import eventBus from "../eventBus/EventBus.js";
 
 class Producer extends Building {
     constructor({name, space, resourceType, productionRate, cost, level = DEFAULT_BUILDING_LEVEL, constructionTime = DEFAULT_CONSTRUCTION_TIME}) {
@@ -7,11 +8,6 @@ class Producer extends Building {
         this.resourceType = resourceType;
         this.productionRate = productionRate;
         this.underConstruction = false;
-    }
-
-    setGameState(gameState) {
-        console.log("Setting gameState in Producer", gameState);
-        this.gameState = gameState;
     }
 
     produce() {
@@ -24,19 +20,14 @@ class Producer extends Building {
 
     // Override for the buildings.upgrade
     upgrade() {
-        console.log("gameState in upgrade", this.gameState);
         if (this.hasSufficientResources() && !this.underConstruction) {
-            if (this.gameState.buildingQueue.addToQueue(this, 'upgrade')) {
-                this.gameState.gameLog.info(`Upgrade of ${this.name} has been added to the building queue.`);
-            } else {
-                this.gameState.gameLog.error("Building queue is full!");
-            }
+            eventBus.emit('canAddToQueue', this);
         } else {
             if (!this.hasSufficientResources()) {
-                this.gameState.gameLog.negative("Insufficient resources to upgrade!")
+               eventBus.emit('log.negative',"Insufficient resources to upgrade!")
             }
             if (this.underConstruction) {
-                this.gameState.gameLog.negative("The building is currently under construction!");
+                eventBus.emit('log.negative',"The building is currently under construction!");
             }
         }
     }

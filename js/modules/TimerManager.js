@@ -1,7 +1,7 @@
 import eventBus from "../eventBus/EventBus.js";
 
 class TimerManager {
-    constructor(tickInterval = 1000) { // kill the magic number even if its means 1 second
+    constructor(tickInterval = 1000) { // default to 1 second intervals
         this.tickInterval = tickInterval;
         this.intervalID = null;
     }
@@ -21,7 +21,6 @@ class TimerManager {
             this.intervalID = null;
         }
     }
+}
 
- }
-
- export default TimerManager;
+export default TimerManager;

@@ -1,6 +1,6 @@
 import eventBus from "../eventBus/EventBus.js";
 import createBuilding from "../utils/buildingFactory";
-import resource from "../classes/resource";
+
 
 
 class UImanager {
