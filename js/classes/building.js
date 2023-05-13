@@ -15,6 +15,9 @@ class Building {
     }
 
     setGameState(gameState) {
+        if (!gameState.gameLog) {
+            throw new Error('gameLog is not defined in gameState');
+        }
         this.gameState = gameState;
     }
 
