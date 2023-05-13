@@ -1,5 +1,6 @@
 import Resource from './classes/resource.js';
 import GameLog from "./classes/gameLog.js";
+import Producer from "./classes/producer.js";
 import TimerManager from "./classes/timerManager.js";
 import BuildingManager from './classes/buildingManager.js';
 import BuildingQueue from "./classes/buildingQueue.js";
@@ -35,16 +36,11 @@ let gameState = {
 
 timerManager.register({
     onTimer: function() {
-        // Check if there's a building in the queue
-        if (buildingQueue.getQueueLength() > 0) {
-            // Check if the building can be built
-            if (buildingManager.canBuild(buildingQueue.getNextBuilding())) {
-                // DO NOTHING, let buildingQueue handle the construction
+        // Produce resources from each Producer
+        for (let building of buildings) {
+            if (building instanceof Producer) {
+                building.produce();
             }
-        }
-        // Update the producers
-        for (let producer of producers) {
-            producer.produce();
         }
         // Update the display
         gameState.uiManager.updateDisplay(resources, buildingManager);
@@ -52,7 +48,7 @@ timerManager.register({
 
         // Generate build buttons
         if (!areButtonsGenerated) {
-            gameState.uiManager.generateBuildButtons(buildingData, buildingManager);
+            gameState.uiManager.generateBuildButtons(buildingData, buildingManager, gameState.buildingQueue);
             areButtonsGenerated = true;
         }
     }
