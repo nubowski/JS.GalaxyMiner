@@ -2,20 +2,23 @@ import Building from "../modules/Building.js";
 import Producer from "../modules/Producer.js";
 
 const createBuilding = (type, building, resources) => {
-    console.log(building); // Add this line to check what is passed into the function
+    console.log(`Building Type: `, type);
 
-    // Replace resource names in cost array with actual Resource instances
-    building.cost = building.cost.map(costObj => {
+    // Create a new cost array with actual Resource instances, without mutating the original building
+    const newCost = building.cost.map(costObj => {
         const resource = resources.find(res => res.name === costObj.resource);
         if (!resource) throw Error(`Unknown resource: ${costObj.resource}`);
         return {...costObj, resource};
     });
 
+    // Create a new building object with the mapped cost array
+    const newBuilding = {...building, cost: newCost};
+
     switch (type) {
         case 'Building':
-            return new Building(building);
+            return new Building(newBuilding);
         case 'Producer':
-            return new Producer(building);
+            return new Producer(newBuilding);
         default:
             throw Error(`Unknown Building Type: ${type}`);
     }

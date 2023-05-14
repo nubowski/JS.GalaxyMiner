@@ -1,5 +1,4 @@
 import eventBus from "../eventBus/EventBus.js";
-import building from "./Building.js";
 
 class UserInputManager {
     constructor(buildingTemplates) {
@@ -10,13 +9,12 @@ class UserInputManager {
 
     generateBuildingButtons() {
         const container = document.getElementById('buttonContainer');
-        for (let buildingName in this.buildingTemplates) {
+        for (let {name: buildingName} of this.buildingTemplates) {
             let button = document.createElement('button');
             button.textContent = `Build ${buildingName}`;
             button.onclick = () => {
-                let buildingTemplate = this.buildingTemplates[buildingName];
-                let buildingInfo = JSON.parse(JSON.stringify(buildingTemplate)); // Deep copy
-                eventBus.emit('createBuilding', buildingInfo);
+                let buildingInfo = this.buildingTemplates.find(template => template.name === buildingName);
+                eventBus.emit('attemptToBuild', buildingInfo);
             };
             container.appendChild(button);
         }

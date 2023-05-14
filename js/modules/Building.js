@@ -5,7 +5,7 @@ class Building {
     constructor({ name, space, cost, level = DEFAULT_BUILDING_LEVEL, constructionTime = DEFAULT_CONSTRUCTION_TIME }) {
         this.name = name;
         this.space = space;
-        this.level = 0;
+        this.level = level;
         this.constructionTime = constructionTime;
         this.cost = cost.map(resourceObj => ({
             resource: resourceObj.resource,

@@ -11,17 +11,15 @@ import UserInputManager from './modules/UserInputManager.js';
 // Init Instances
 let timerManager = new TimerManager();
 let uiManager = new UIManager();
-let buildingManager = new BuildingManager();
 
-
-
-// Convert resources data into instances of the Resource class
+// Use resourceData directly as it already contains Resource instances
 let resourceInstances = Object.values(resourceData);
 
 // Convert building data into instances of the Building or Producer class
-let buildingTemplates = Object.values(buildingData).map(building => createBuilding(building.type, building, resourceInstances));
+let buildingTemplates = Object.values(buildingData);
 
 let userInputManager = new UserInputManager(buildingTemplates);
+let buildingManager = new BuildingManager(buildingTemplates, resourceInstances);
 
 // DOM-related interactions
 document.addEventListener('DOMContentLoaded', () => {
