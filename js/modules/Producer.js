@@ -10,13 +10,6 @@ class Producer extends Building {
         this.underConstruction = false;
     }
 
-    produce() {
-        if (!this.underConstruction) {
-            // Increase player's resource count of this.type by this.rate
-            let amount = this.productionRate;
-            this.resourceType.addQuantity(amount);
-        }
-    }
 
     // Override for the buildings.upgrade
     upgrade() {

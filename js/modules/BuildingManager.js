@@ -1,6 +1,7 @@
 import eventBus from '../eventBus/EventBus.js';
 import {MAX_BUILDING_SPACE, DEFAULT_BUILDING_LEVEL, DEFAULT_QUEUE_SIZE} from "../data/constants.js";
 import createBuilding from "../utils/buildingFactory.js";
+import Producer from "./Producer.js";
 
 class BuildingManager {
     constructor(buildingTemplates, resources, maxSpaces = MAX_BUILDING_SPACE, maxSize = DEFAULT_QUEUE_SIZE) {
@@ -45,8 +46,22 @@ class BuildingManager {
 
                 // Emit 'queueUpdated' event whenever the timer ticks
                 eventBus.emit('updateQueueDisplay', this.queue);
+
+                // Update all producers
             }
+            this.updateProducers();
         });
+    }
+
+    updateProducers() {
+        for (let building of this.buildings) {
+            if (building instanceof Producer && !building.underConstruction) {
+                eventBus.emit('produceResource', {
+                    resourceType: building.resourceType,
+                    productionRate: building.productionRate,
+                });
+            }
+        }
     }
 
 

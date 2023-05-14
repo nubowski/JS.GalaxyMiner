@@ -3,9 +3,15 @@ import resourceData from "../data/resourceData.js";
 
 class Resource {
     // run when a new instance of the class is created
-    constructor(name, quantity) {
+    constructor(name, quantity, resources) {
         this.name = name; // name of the res
         this.quantity = quantity; // current quantity of the res
+
+        eventBus.on("produceResource", ({ resourceType, productionRate }) => {
+            if (resourceType === this.name) {
+                this.produce(productionRate);
+            }
+        });
     }
 
     addQuantity(amount) {
@@ -25,6 +31,11 @@ class Resource {
 
     canSubtract(amount) {
         return this.quantity >= amount;
+    }
+
+    produce(productionRate) {
+        this.addQuantity(productionRate);
+        eventBus.emit("resourceUpdated", resourceData);
     }
 }
 
