@@ -2,12 +2,24 @@ import eventBus from "../eventBus/EventBus.js";
 
 
 class UImanager {
-    constructor() {
+    constructor(buildingTemplates) {
+        this.buildingTemplates = buildingTemplates;
         eventBus.on('resourceUpdated', (resources) => this.updateResourceDisplay(resources));
         eventBus.on('buildingSpaceUpdated', (buildingManager) => this.updateSpaceDisplay(buildingManager));
         eventBus.on('buildingUpdated', (buildings) => this.updateBuildingDisplay(buildings));
         eventBus.on('updateQueueDisplay', (queue) => this.updateQueueDisplay(queue));
         eventBus.on('updateDisplay', ({resources, buildingManager}) => this.updateDisplay(resources, buildingManager));
+        eventBus.on('createBuildButtons', () => this.generateBuildingButtons());
+    }
+
+    generateBuildingButtons() {
+        const container = document.getElementById('buttonContainer');
+        for (let buildingTemplate of this.buildingTemplates) {
+            let buildButton = document.createElement('button');
+            buildButton.id = `build-${buildingTemplate.name}`;  // give the button a unique id
+            buildButton.textContent = `Build ${buildingTemplate.name}`;
+            container.appendChild(buildButton);
+        }
     }
 
     updateResourceDisplay(resources) {
@@ -50,14 +62,15 @@ class UImanager {
             buildingDiv.textContent = `${building.name} - Level: ${building.level}`;
             buildingWrapper.appendChild(buildingDiv);
 
+            // Create and append upgrade button
             let upgradeButton = document.createElement('button');
+            upgradeButton.id = `upgrade-${building.name}-${building.id}`; // give the button a unique id
             upgradeButton.textContent = `Upgrade`;
-            upgradeButton.onclick = () => {
-                building.upgrade();
-            };
             buildingWrapper.appendChild(upgradeButton);
 
             container.appendChild(buildingWrapper);
+
+            eventBus.emit('upgradeButtonCreated', upgradeButton.id, buildings);
         }
     }
 

@@ -1,23 +1,28 @@
 import eventBus from "../eventBus/EventBus.js";
 
 class UserInputManager {
-    constructor(buildingTemplates) {
-        this.buildingTemplates = buildingTemplates;
+    constructor() {
 
-        this.generateBuildingButtons();
+
+        eventBus.on('onClickListener', (buildingTemplates) => this.attachEventHandlers(buildingTemplates));
+        eventBus.on('upgradeButtonCreated', (buttonId, buildings) => this.attachUpgradeEventHandler(buttonId, buildings));
     }
 
-    generateBuildingButtons() {
-        const container = document.getElementById('buttonContainer');
-        for (let {name: buildingName} of this.buildingTemplates) {
-            let button = document.createElement('button');
-            button.textContent = `Build ${buildingName}`;
-            button.onclick = () => {
-                let buildingInfo = this.buildingTemplates.find(template => template.name === buildingName);
-                eventBus.emit('attemptToBuild', buildingInfo);
+    attachEventHandlers(buildingTemplates) {
+        for (let buildingTemplate of buildingTemplates) {
+            let buildButton = document.getElementById(`build-${buildingTemplate.name}`);
+            buildButton.onclick = () => {
+                eventBus.emit('attemptToBuild', buildingTemplate);
             };
-            container.appendChild(button);
         }
+    }
+
+    attachUpgradeEventHandler(buttonId, buildings) {
+        let upgradeButton = document.getElementById(buttonId);
+        upgradeButton.onclick = () => {
+            let building = buildings.find(b => `upgrade-${b.name}-${b.id}` === buttonId);
+            eventBus.emit('attemptToUpgrade', building);
+        };
     }
 }
 
