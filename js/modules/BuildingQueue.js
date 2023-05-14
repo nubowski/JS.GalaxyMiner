@@ -1,6 +1,6 @@
 import EventBus from '../eventBus/EventBus.js';
 import {DEFAULT_QUEUE_SIZE} from "../data/constants.js";
-import createBuilding from "../utils/buildingFactory";
+import createBuilding from "../utils/buildingFactory.js";
 
 let eventBus = EventBus;  // Import instance
 
