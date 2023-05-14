@@ -10,7 +10,6 @@ class BuildingManager {
         this.usedSpaces = 0;
         this.reservedSpaces = 0;
         this.buildings = [];
-        this.builtBuildings = [];
         this.queue = [];
         this.maxSize = maxSize;
 
@@ -33,10 +32,9 @@ class BuildingManager {
             }
         });
 
-// Event listener for 'timerTick' event
         eventBus.on('timerTick', () => {
             if (this.queue.length > 0) {
-                let building = this.queue[0];
+                const building = this.queue[0];
                 building.remainingTime -= 1000; // reduce remaining time by one second
 
                 if (building.remainingTime <= 0) {
@@ -44,14 +42,13 @@ class BuildingManager {
                     this.removeFromQueue();
                     eventBus.emit('buildingUpdated', this.getBuiltBuildings());
                 }
+
+                // Emit 'queueUpdated' event whenever the timer ticks
+                eventBus.emit('updateQueueDisplay', this.queue);
             }
         });
     }
 
-    handleCreateBuilding(buildingInfo) {
-        let building = createBuilding(buildingInfo.type, buildingInfo);
-        this.addToQueue(building);
-    }
 
     canAddToQueue(building) {
         return (this.queue.length < this.maxSize) && (this.usedSpaces +this.reservedSpaces + building.space <= this.maxSpaces); // TODO to complex shit. Just add `space` param while its in queue

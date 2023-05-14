@@ -6,7 +6,7 @@ class UImanager {
         eventBus.on('resourceUpdated', (resources) => this.updateResourceDisplay(resources));
         eventBus.on('buildingSpaceUpdated', (buildingManager) => this.updateSpaceDisplay(buildingManager));
         eventBus.on('buildingUpdated', (buildings) => this.updateBuildingDisplay(buildings));
-        eventBus.on('queueUpdated', (queue) => this.updateQueueDisplay(queue));
+        eventBus.on('updateQueueDisplay', (queue) => this.updateQueueDisplay(queue));
         eventBus.on('updateDisplay', ({resources, buildingManager}) => this.updateDisplay(resources, buildingManager));
     }
 
@@ -68,7 +68,7 @@ class UImanager {
             let building = queue[i];
             let queueItem = document.createElement('div');
             queueItem.classList.add('bqueue-item');
-            queueItem.textContent = `Building: ${building.name}\nRemaining time: ${building.remainingTime}`;
+            queueItem.textContent = `Building: ${building.name}\nRemaining time: ${building.remainingTime / 1000}`;
             queueDisplay.appendChild(queueItem);
         }
     }
