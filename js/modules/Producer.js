@@ -8,23 +8,15 @@ class Producer extends Building {
         this.resourceType = resourceType;
         this.productionRate = productionRate;
         this.underConstruction = false;
-
-        eventBus.on('attemptToUpgrade', (building) => this.upgrade(building));
     }
 
 
     // Override for the buildings.upgrade
+    // Override for the buildings.upgrade
     upgrade() {
-        if (this.hasSufficientResources() && !this.underConstruction) {
-            eventBus.emit('canAddToQueue', this);
-        } else {
-            if (!this.hasSufficientResources()) {
-               eventBus.emit('log.negative',"Insufficient resources to upgrade!")
-            }
-            if (this.underConstruction) {
-                eventBus.emit('log.negative',"The building is currently under construction!");
-            }
-        }
+        this.level += 1;
+        this.updateCost();
+        this.productionRate *= this.level;
     }
 }
 

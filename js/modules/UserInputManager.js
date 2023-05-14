@@ -21,7 +21,7 @@ class UserInputManager {
         let upgradeButton = document.getElementById(buttonId);
         upgradeButton.onclick = () => {
             let building = buildings.find(b => `upgrade-${b.name}-${b.id}` === buttonId);
-            eventBus.emit('attemptToUpgrade', building);
+            eventBus.emit('attemptToUpgrade', {buildingID: building.id, buildings: buildings});
         };
     }
 }

@@ -51,6 +51,8 @@ class BuildingManager {
             }
             this.updateProducers();
         });
+
+        eventBus.on('attemptToUpgrade', ({buildingID, buildings}) => this.upgradeBuilding(buildingID, buildings));
     }
 
     updateProducers() {
@@ -120,15 +122,25 @@ class BuildingManager {
         }
     }
 
-    upgradeBuilding(building) {
-        const index = this.buildings.indexOf(building);
-        if (index > -1) {
-            building.level += 1;
-            // Adjust other building properties here as necessary
-            eventBus.emit('buildingUpdated', this.getBuiltBuildings());
-            return true;
+    upgradeBuilding(buildingID, buildings) {
+        const buildingIndex = buildings.findIndex(building => building.id === buildingID);
+        if (buildingIndex !== -1) {
+            const building = buildings[buildingIndex];
+            if (building.hasSufficientResources() && !building.underConstruction) {
+                building.subtractResourcesForBuilding();
+                building.upgrade();  // Call the building's own upgrade method
+                eventBus.emit('buildingUpdated', buildings);
+            } else {
+                if (!building.hasSufficientResources()) {
+                    eventBus.emit('log.negative', "Insufficient resources to upgrade!")
+                }
+                if (building.underConstruction) {
+                    eventBus.emit('log.negative', "The building is currently under construction!");
+                }
+            }
+        } else {
+            console.error(`Building with ID: ${buildingID} not found`);
         }
-        return false;
     }
 
     getBuiltBuildings() {
