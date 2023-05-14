@@ -91,6 +91,7 @@ class BuildingManager {
             this.reservedSpaces += building.space;
             eventBus.emit('updateQueueDisplay', this.queue);
             eventBus.emit('constructionStarted', building);
+            eventBus.emit('buildingSpaceUpdated', this);
             return true;
         } else {
             return false;
@@ -112,6 +113,7 @@ class BuildingManager {
             this.reservedSpaces -= building.space;
             building.setLevel(initialLevel);
             eventBus.emit('buildingUpdated', this.getBuiltBuildings());
+            eventBus.emit('buildingSpaceUpdated', this);
         } else {
             console.log("Not enough space to add building.");
             // Emit an error event or handle this error in another way
