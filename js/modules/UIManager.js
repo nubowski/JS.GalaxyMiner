@@ -1,6 +1,4 @@
 import eventBus from "../eventBus/EventBus.js";
-import createBuilding from "../utils/buildingFactory";
-
 
 
 class UImanager {
@@ -9,6 +7,7 @@ class UImanager {
         eventBus.on('buildingSpaceUpdated', (buildingManager) => this.updateSpaceDisplay(buildingManager));
         eventBus.on('buildingUpdated', (buildings) => this.updateBuildingDisplay(buildings));
         eventBus.on('queueUpdated', (queue) => this.updateQueueDisplay(queue));
+        eventBus.on('updateDisplay', ({resources, buildingManager}) => this.updateDisplay(resources, buildingManager));
     }
 
     updateResourceDisplay(resources) {
@@ -36,20 +35,6 @@ class UImanager {
     updateDisplay(resources, buildingManager) {
         this.updateResourceDisplay(resources);
         this.updateSpaceDisplay(buildingManager);
-    }
-
-    generateBuildButtons(buildingData, buildingManager, buildingQueue, resources) {
-        const container = document.getElementById('buttonContainer');
-        for (let buildingName in buildingData) {
-            let button = document.createElement('button');
-            button.textContent = `Build ${buildingName}`;
-            button.onclick = () => {
-                let buildingInfo = JSON.parse(JSON.stringify(buildingData[buildingName])); // Deep copy
-                let building = createBuilding(buildingInfo.type, buildingInfo, resources);
-                buildingQueue.addToQueue(building);
-            };
-            container.appendChild(button);
-        }
     }
 
     updateBuildingDisplay(buildings) {

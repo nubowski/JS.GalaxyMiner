@@ -1,5 +1,6 @@
 import EventBus from '../eventBus/EventBus.js';
 import {DEFAULT_QUEUE_SIZE} from "../data/constants.js";
+import createBuilding from "../utils/buildingFactory";
 
 let eventBus = EventBus;  // Import instance
 
@@ -7,6 +8,7 @@ class BuildingQueue {
     constructor(maxSize = DEFAULT_QUEUE_SIZE) {
         this.queue = [];
         this.maxSize = maxSize;
+        eventBus.on('createBuilding', (buildingInfo) => this.handleCreateBuilding(buildingInfo));
 
         // Event listener for 'timerTick' event
         eventBus.on('timerTick', () => {
@@ -19,6 +21,11 @@ class BuildingQueue {
                 }
             }
         });
+    }
+
+    handleCreateBuilding(buildingInfo) {
+        let building = createBuilding(buildingInfo.type, buildingInfo);
+        this.addToQueue(building);
     }
 
     canAddToQueue(building) {
