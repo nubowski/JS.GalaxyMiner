@@ -9,8 +9,7 @@ class BuildingManager {
         this.buildings = [];
         this.builtBuildings = [];
 
-        eventBus.on('buildingConstructed', (building) => this.addBuilding(building));
-        eventBus.on('startBuilding', () => this.startBuilding());
+        eventBus.on('addBuilding', (building) => this.addBuilding(building));
     }
 
     getBuiltBuildings() {
@@ -48,8 +47,8 @@ class BuildingManager {
         return false;
     }
 
-    startBuilding () {
-        eventBus.emit('startBuilding');
+    startBuilding(building) {
+        eventBus.emit('constructionStarted', building);
     }
 }
 
