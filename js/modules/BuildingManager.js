@@ -86,7 +86,7 @@ class BuildingManager {
     }
 
     addToQueue(building, isUpgrade = false) {
-        if (this.canAddToQueue(building)) {
+        if (this.canAddToQueue(building) && building.hasSufficientResources()) {
             building.remainingTime = building.constructionTime;
             building.isUpgrade = isUpgrade;
             this.queue.push(building);
@@ -138,8 +138,11 @@ class BuildingManager {
         if (buildingIndex !== -1) {
             const building = buildings[buildingIndex];
             if (building.hasSufficientResources() && !building.underConstruction) {
-                building.subtractResourcesForBuilding();
-                this.addToQueue(building, true);
+                if (this.addToQueue(building, true)) { // Only subtract resources if building is added to queue
+                    building.subtractResourcesForBuilding();
+                } else {
+                    eventBus.emit('log.negative', "Queue is full!");
+                }
             } else {
                 if (!building.hasSufficientResources()) {
                     eventBus.emit('log.negative', "Insufficient resources to upgrade!")
