@@ -5,7 +5,7 @@ class UserInputManager {
 
 
         eventBus.on('onClickListener', (buildingTemplates) => this.attachEventHandlers(buildingTemplates));
-        eventBus.on('upgradeButtonCreated', (buttonId, buildings) => this.attachUpgradeEventHandler(buttonId, buildings));
+        eventBus.on('upgradeButtonCreated', ({buttonId, buildings}) => this.attachUpgradeEventHandler(buttonId, buildings));
     }
 
     attachEventHandlers(buildingTemplates) {

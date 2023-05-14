@@ -8,6 +8,8 @@ class Producer extends Building {
         this.resourceType = resourceType;
         this.productionRate = productionRate;
         this.underConstruction = false;
+
+        eventBus.on('attemptToUpgrade', (building) => this.upgrade(building));
     }
 
 

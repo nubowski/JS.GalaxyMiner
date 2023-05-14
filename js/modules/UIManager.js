@@ -70,7 +70,7 @@ class UImanager {
 
             container.appendChild(buildingWrapper);
 
-            eventBus.emit('upgradeButtonCreated', upgradeButton.id, buildings);
+            eventBus.emit('upgradeButtonCreated', {buttonId: upgradeButton.id, buildings: buildings});
         }
     }
 
