@@ -1,4 +1,4 @@
-import {DEFAULT_BUILDING_LEVEL, DEFAULT_CONSTRUCTION_TIME, UPGRADE_COST_MULTIPLIER} from "../data/constants";
+import {DEFAULT_BUILDING_LEVEL, DEFAULT_CONSTRUCTION_TIME} from "../data/constants.js";
 import Building from "./Building.js";
 import eventBus from "../eventBus/EventBus.js";
 

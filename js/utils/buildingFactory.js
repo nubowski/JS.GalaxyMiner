@@ -1,9 +1,11 @@
 import Building from "../modules/Building.js";
 import Producer from "../modules/Producer.js";
 
-const createBuilding = (type, options, resources) => {
+const createBuilding = (type, building, resources) => {
+    console.log(building); // Add this line to check what is passed into the function
+
     // Replace resource names in cost array with actual Resource instances
-    options.cost = options.cost.map(costObj => {
+    building.cost = building.cost.map(costObj => {
         const resource = resources.find(res => res.name === costObj.resource);
         if (!resource) throw Error(`Unknown resource: ${costObj.resource}`);
         return {...costObj, resource};
@@ -11,11 +13,11 @@ const createBuilding = (type, options, resources) => {
 
     switch (type) {
         case 'Building':
-            return new Building(options);
+            return new Building(building);
         case 'Producer':
-            return new Producer(options);
+            return new Producer(building);
         default:
-            throw Error(`Unknown Building Type: ${type}`); // use Error or use own logs???
+            throw Error(`Unknown Building Type: ${type}`);
     }
 };
 
