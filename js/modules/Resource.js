@@ -1,4 +1,5 @@
 import eventBus from "../eventBus/EventBus.js";
+import resourceData from "../data/resourceData.js";
 
 class Resource {
     // run when a new instance of the class is created
@@ -9,13 +10,13 @@ class Resource {
 
     addQuantity(amount) {
         this.quantity += amount;
-        eventBus.emit('resourceChanged', this);
+        eventBus.emit('resourceUpdated', resourceData);
     }
 
     subtractQuantity(amount) {
         if (this.quantity >= amount) {
             this.quantity -= amount;
-            eventBus.emit('resourceChanged', this);
+            eventBus.emit('resourceUpdated', resourceData);
             return true;
         } else {
             return false;

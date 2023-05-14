@@ -51,7 +51,7 @@ class BuildingManager {
 
 
     canAddToQueue(building) {
-        return (this.queue.length < this.maxSize) && (this.usedSpaces +this.reservedSpaces + building.space <= this.maxSpaces); // TODO to complex shit. Just add `space` param while its in queue
+        return (this.queue.length < this.maxSize) && (this.usedSpaces +this.reservedSpaces + building.space <= this.maxSpaces); // TODO too complex shit. Just add `space` param while its in queue
     }
 
     canReserveSpace(building) {
