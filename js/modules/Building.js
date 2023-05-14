@@ -2,10 +2,12 @@ import eventBus from "../eventBus/EventBus.js";
 import {DEFAULT_BUILDING_LEVEL, DEFAULT_CONSTRUCTION_TIME, UPGRADE_COST_MULTIPLIER} from "../data/constants.js";
 
 class Building {
+    static idCounter = 0;
     constructor({ name, space, cost, level = DEFAULT_BUILDING_LEVEL, constructionTime = DEFAULT_CONSTRUCTION_TIME }) {
+        this.id = Building.idCounter++;
         this.name = name;
         this.space = space;
-        this.level = 0;
+        this.level = level;
         this.constructionTime = constructionTime;
         this.cost = cost.map(resourceObj => ({
             resource: resourceObj.resource,

@@ -1,4 +1,4 @@
-import {DEFAULT_BUILDING_LEVEL, DEFAULT_CONSTRUCTION_TIME, UPGRADE_COST_MULTIPLIER} from "../data/constants";
+import {DEFAULT_BUILDING_LEVEL, DEFAULT_CONSTRUCTION_TIME} from "../data/constants.js";
 import Building from "./Building.js";
 import eventBus from "../eventBus/EventBus.js";
 
@@ -10,26 +10,13 @@ class Producer extends Building {
         this.underConstruction = false;
     }
 
-    produce() {
-        if (!this.underConstruction) {
-            // Increase player's resource count of this.type by this.rate
-            let amount = this.productionRate;
-            this.resourceType.addQuantity(amount);
-        }
-    }
 
     // Override for the buildings.upgrade
+    // Override for the buildings.upgrade
     upgrade() {
-        if (this.hasSufficientResources() && !this.underConstruction) {
-            eventBus.emit('canAddToQueue', this);
-        } else {
-            if (!this.hasSufficientResources()) {
-               eventBus.emit('log.negative',"Insufficient resources to upgrade!")
-            }
-            if (this.underConstruction) {
-                eventBus.emit('log.negative',"The building is currently under construction!");
-            }
-        }
+        this.level += 1;
+        this.updateCost();
+        this.productionRate *= this.level;
     }
 }
 
