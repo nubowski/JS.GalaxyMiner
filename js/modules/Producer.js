@@ -17,6 +17,7 @@ class Producer extends Building {
         this.level += 1;
         this.updateCost();
         this.productionRate *= this.level;
+        this.underConstruction = true;
     }
 }
 

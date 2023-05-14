@@ -5,6 +5,7 @@ class Building {
     static idCounter = 0;
     constructor({ name, space, cost, level = DEFAULT_BUILDING_LEVEL, constructionTime = DEFAULT_CONSTRUCTION_TIME }) {
         this.id = Building.idCounter++;
+        this.status = "idle";
         this.name = name;
         this.space = space;
         this.level = level;
@@ -45,6 +46,7 @@ class Building {
 
     upgrade() {
         // Upgrade logic goes here
+        this.status = "upgrade";
     }
 
     updateCost() {
