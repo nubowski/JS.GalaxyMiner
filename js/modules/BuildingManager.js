@@ -41,6 +41,7 @@ class BuildingManager {
                 if (building.remainingTime <= 0) {
                     // if construction time has elapsed, remove building from queue
                     this.removeFromQueue();
+                    building.underConstruction = false;
                     eventBus.emit('buildingUpdated', this.getBuiltBuildings());
                 }
 
@@ -57,7 +58,7 @@ class BuildingManager {
 
     updateProducers() {
         for (let building of this.buildings) {
-            if (building instanceof Producer && !building.underConstruction) {
+            if (building instanceof Producer && !building.underConstruction && building.status !== "upgrade") {
                 eventBus.emit('produceResource', {
                     resourceType: building.resourceType,
                     productionRate: building.productionRate,
@@ -65,7 +66,6 @@ class BuildingManager {
             }
         }
     }
-
 
     canAddToQueue(building) {
         return (this.queue.length < this.maxSize) && (this.usedSpaces +this.reservedSpaces + building.space <= this.maxSpaces); // TODO too complex shit. Just add `space` param while its in queue
@@ -85,12 +85,15 @@ class BuildingManager {
         return false;
     }
 
-    addToQueue(building) {
-        if (this.canAddToQueue(building)) {
+    addToQueue(building, isUpgrade = false) {
+        if (this.canAddToQueue(building) && building.hasSufficientResources()) {
             building.remainingTime = building.constructionTime;
+            building.isUpgrade = isUpgrade;
             this.queue.push(building);
             building.subtractResourcesForBuilding();
-            this.reservedSpaces += building.space;
+            if (!isUpgrade) {
+                this.reservedSpaces += building.space;
+            }
             eventBus.emit('updateQueueDisplay', this.queue);
             eventBus.emit('constructionStarted', building);
             eventBus.emit('buildingSpaceUpdated', this);
@@ -103,8 +106,14 @@ class BuildingManager {
     removeFromQueue() {
         if (this.queue.length > 0) {
             let building = this.queue.shift();
+            if (building.isUpgrade) {
+                building.upgrade();
+                // Remove the original building from this.buildings
+                this.removeBuilding(building);
+            }
             this.addBuilding(building);
             eventBus.emit('updateQueueDisplay', this.queue);
+            eventBus.emit('buildingUpdated', this.buildings);
         }
     }
 
@@ -113,7 +122,9 @@ class BuildingManager {
             this.buildings.push(building);
             this.usedSpaces += building.space;
             this.reservedSpaces -= building.space;
-            building.setLevel(initialLevel);
+            if (!building.isUpgrade) {
+                building.setLevel(initialLevel);
+            }
             eventBus.emit('buildingUpdated', this.getBuiltBuildings());
             eventBus.emit('buildingSpaceUpdated', this);
         } else {
@@ -127,9 +138,11 @@ class BuildingManager {
         if (buildingIndex !== -1) {
             const building = buildings[buildingIndex];
             if (building.hasSufficientResources() && !building.underConstruction) {
-                building.subtractResourcesForBuilding();
-                building.upgrade();  // Call the building's own upgrade method
-                eventBus.emit('buildingUpdated', buildings);
+                if (this.addToQueue(building, true)) { // Only subtract resources if building is added to queue
+                    building.subtractResourcesForBuilding();
+                } else {
+                    eventBus.emit('log.negative', "Queue is full!");
+                }
             } else {
                 if (!building.hasSufficientResources()) {
                     eventBus.emit('log.negative', "Insufficient resources to upgrade!")
