@@ -2,7 +2,6 @@ import Building from "../modules/Building.js";
 import Producer from "../modules/Producer.js";
 
 const createBuilding = (type, building, resources) => {
-    console.log(`Building Type: `, type);
 
     // Create a new cost array with actual Resource instances, without mutating the original building
     const newCost = building.cost.map(costObj => {
