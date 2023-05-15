@@ -140,6 +140,7 @@ class BuildingManager {
             if (building.hasSufficientResources() && !building.underConstruction) {
                 if (this.addToQueue(building, true)) { // Only subtract resources if building is added to queue
                     building.subtractResourcesForBuilding();
+                    building.underConstruction = true; // Mark the building as under construction
                 } else {
                     eventBus.emit('log.negative', "Queue is full!");
                 }
