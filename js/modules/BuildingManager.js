@@ -14,18 +14,15 @@ class BuildingManager {
         this.queue = [];
         this.maxSize = maxSize;
 
-        // Event listener for 'attemptToBuild' event
         eventBus.on('attemptToBuild', (buildingInfo) => {
-            // find data by name
             let buildingData = this.buildingTemplates.find(template => template.name === buildingInfo.name);
-            // check if the building data exists
             if (!buildingData) {
                 console.error(`Unknown building: ${buildingInfo.name}`);
                 return;
             }
             // new building
             let newBuilding = createBuilding(buildingData.type, buildingData, this.resources);
-            // add new building to the queue if there's enough space and the queue isn't full
+            // add new building to the queue
             if (this.canAddToQueue(newBuilding)) {
                 this.addToQueue(newBuilding);
             } else {
@@ -108,10 +105,15 @@ class BuildingManager {
             let building = this.queue.shift();
             if (building.isUpgrade) {
                 building.upgrade();
-                // Remove the original building from this.buildings
-                this.removeBuilding(building);
+                // Find the original building in this.buildings and replace it with the upgraded building
+                const originalBuildingIndex = this.buildings.findIndex(b => b.id === building.id);
+                if (originalBuildingIndex !== -1) {
+                    this.buildings[originalBuildingIndex] = building;
+                }
+            } else {
+                // If it's not an upgrade, add the building normally
+                this.addBuilding(building);
             }
-            this.addBuilding(building);
             eventBus.emit('updateQueueDisplay', this.queue);
             eventBus.emit('buildingUpdated', this.buildings);
         }
@@ -140,6 +142,7 @@ class BuildingManager {
             if (building.hasSufficientResources() && !building.underConstruction) {
                 if (this.addToQueue(building, true)) { // Only subtract resources if building is added to queue
                     building.subtractResourcesForBuilding();
+                    building.underConstruction = true; // Mark the building as under construction
                 } else {
                     eventBus.emit('log.negative', "Queue is full!");
                 }
@@ -154,6 +157,13 @@ class BuildingManager {
         } else {
             console.error(`Building with ID: ${buildingID} not found`);
         }
+    }
+
+    clearBuildings() {
+        this.buildings = [];
+        this.queue = [];
+        this.usedSpaces = 0;
+        this.reservedSpaces = 0;
     }
 
     getBuiltBuildings() {
