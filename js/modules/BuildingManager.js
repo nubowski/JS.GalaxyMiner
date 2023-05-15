@@ -159,6 +159,13 @@ class BuildingManager {
         }
     }
 
+    clearBuildings() {
+        this.buildings = [];
+        this.queue = [];
+        this.usedSpaces = 0;
+        this.reservedSpaces = 0;
+    }
+
     getBuiltBuildings() {
         return this.buildings;
     }

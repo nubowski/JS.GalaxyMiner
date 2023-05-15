@@ -1,23 +1,26 @@
 import eventBus from './eventBus/EventBus.js';
-import GameLog from './modules/GameLog.js';
 import TimerManager from './modules/TimerManager.js';
+import GameLog from './modules/GameLog.js';
 import resourceData from './data/resourceData.js';
 import buildingData from './data/buildingData.js';
 import createBuilding from './utils/buildingFactory.js';
 import BuildingManager from './modules/BuildingManager.js';
 import UIManager from './modules/UIManager.js';
 import UserInputManager from './modules/UserInputManager.js';
+import GameStateManager from "./modules/GameStateManager.js";
+import SaveManager from "./modules/SaveManager.js";
 
 // Init Instances
 let buildingTemplates = Object.values(buildingData);
 let resourceInstances = Object.values(resourceData);
 
 let timerManager = new TimerManager();
+let saveManager = new SaveManager();
 let uiManager = new UIManager(buildingTemplates);
 let userInputManager = new UserInputManager(buildingTemplates);
 
-// Convert building data into instances of the Building or Producer class
 let buildingManager = new BuildingManager(buildingTemplates, resourceInstances);
+let gameStateManger = new GameStateManager(resourceInstances, buildingManager);
 
 eventBus.emit('createBuildButtons');
 eventBus.emit('onClickListener', buildingTemplates);
@@ -36,4 +39,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Update the UI with the initial state of the game
     uiManager.updateDisplay(resourceInstances, buildingManager);
+
+    eventBus.emit('LoadGame');
+
+    eventBus.on('setGameState', (loadedState) => {
+        if (loadedState === undefined) {
+            console.log('Starting new game');
+            // start new game
+        } else {
+            console.log('Continuing from saved game state');
+            // use loadedState to continue from the saved game state
+        }
+    });
 });
