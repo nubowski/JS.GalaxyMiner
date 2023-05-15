@@ -1,6 +1,6 @@
 import {DEFAULT_BUILDING_LEVEL, DEFAULT_CONSTRUCTION_TIME} from "../data/constants.js";
 import Building from "./Building.js";
-import eventBus from "../eventBus/EventBus.js";
+
 
 class Producer extends Building {
     constructor({name, space, resourceType, productionRate, cost, level = DEFAULT_BUILDING_LEVEL, constructionTime = DEFAULT_CONSTRUCTION_TIME}) {
