@@ -1,15 +1,20 @@
-import eventBus from "../eventBus/EventBus";
+import eventBus from "../eventBus/EventBus.js";
 
 class SaveManager {
     constructor() {
-        // fired when the game needs to be saved
-        eventBus.on('SaveGame', (gameState) => this.saveGame(gameState));
-
-        // fired when the game needs to be loaded
+        eventBus.on('timerTick', () => this.saveGame());
+        eventBus.on('SaveGame', () => this.saveGame());
         eventBus.on('LoadGame', () => this.loadGame());
+        eventBus.on('ResetGame', () => this.resetGame());
+        eventBus.on('returnGameState', (gameState) => this.prepareGameState(gameState));
     }
 
-    saveGame(gameState) {
+    saveGame() {
+        console.log('SaveGame event emitted');
+        eventBus.emit('getGameState');
+    }
+
+    prepareGameState (gameState) {
         try {
             const serializedState = JSON.stringify(gameState);
             localStorage.setItem('gameState', serializedState);
@@ -19,15 +24,23 @@ class SaveManager {
     }
 
     loadGame() {
+        console.log('LoadGame event received');
         try {
             const serializedState = localStorage.getItem('gameState');
             if (serializedState === null) {
-                return undefined; // case with never ever huever saved
+                eventBus.emit('newGame');
+            } else {
+                let restoredGame = JSON.parse(serializedState);
+                eventBus.emit('setGameState', restoredGame);
             }
-            return JSON.parse(serializedState);
         } catch (err) {
             console.error('Error loading state: ', err);
+            eventBus.emit('newGame');
         }
+    }
+
+    resetGame() {
+        localStorage.removeItem('gameState');
     }
 }
 
