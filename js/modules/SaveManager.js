@@ -10,7 +10,6 @@ class SaveManager {
     }
 
     saveGame() {
-        console.log('SaveGame event emitted');
         eventBus.emit('getGameState');
     }
 
@@ -24,14 +23,14 @@ class SaveManager {
     }
 
     loadGame() {
-        console.log('LoadGame event received');
         try {
             const serializedState = localStorage.getItem('gameState');
             if (serializedState === null) {
                 eventBus.emit('newGame');
             } else {
                 let restoredGame = JSON.parse(serializedState);
-                eventBus.emit('setGameState', restoredGame);
+                // Request the creation of buildings
+                eventBus.emit('requestCreateBuildings', {buildingsData: restoredGame.buildings, gameState: restoredGame});
             }
         } catch (err) {
             console.error('Error loading state: ', err);
@@ -41,6 +40,7 @@ class SaveManager {
 
     resetGame() {
         localStorage.removeItem('gameState');
+        location.reload();
     }
 }
 

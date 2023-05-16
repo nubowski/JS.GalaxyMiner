@@ -14,6 +14,14 @@ class BuildingManager {
         this.queue = [];
         this.maxSize = maxSize;
 
+        eventBus.on('requestCreateBuildings', ({buildingsData, gameState}) => {
+            gameState.buildings = buildingsData.map(
+                buildingData => createBuilding(buildingData.type, {...buildingData}, this.resources)
+            );
+            eventBus.emit('setGameState', gameState);
+            eventBus.emit('gameLoaded', gameState); // Include the entire game state
+        });
+
         eventBus.on('attemptToBuild', (buildingInfo) => {
             let buildingData = this.buildingTemplates.find(template => template.name === buildingInfo.name);
             if (!buildingData) {
@@ -41,16 +49,14 @@ class BuildingManager {
                     building.underConstruction = false;
                     eventBus.emit('buildingUpdated', this.getBuiltBuildings());
                 }
-
                 // Emit 'queueUpdated' event whenever the timer ticks
                 eventBus.emit('updateQueueDisplay', this.queue);
-
-                // Update all producers
             }
             this.updateProducers();
         });
 
         eventBus.on('attemptToUpgrade', ({buildingID, buildings}) => this.upgradeBuilding(buildingID, buildings));
+        eventBus.on('restoreBuilding', (buildingData) => {this.addBuildingDirectly(buildingData);});
     }
 
     updateProducers() {
@@ -131,7 +137,6 @@ class BuildingManager {
             eventBus.emit('buildingSpaceUpdated', this);
         } else {
             console.log("Not enough space to add building.");
-            // Emit an error event or handle this error in another way
         }
     }
 
@@ -157,6 +162,16 @@ class BuildingManager {
         } else {
             console.error(`Building with ID: ${buildingID} not found`);
         }
+    }
+
+    addBuildingDirectly(building) {
+        if (this.usedSpaces + building.space <= this.maxSpaces) {
+            this.buildings.push(building);
+            this.usedSpaces += building.space;
+            eventBus.emit('buildingAdded', {building: building, templates: this.buildingTemplates});
+            return true;
+        }
+        return false;
     }
 
     clearBuildings() {

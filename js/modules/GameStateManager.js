@@ -15,7 +15,6 @@ class GameStateManager {
     }
 
     getGameState() {
-        console.log('getGameState event received');
         let gameState = {};
 
         // save resources
@@ -61,16 +60,12 @@ class GameStateManager {
             }
         }
 
-        // Set buildings
+        // Clear current buildings
         this.buildingManager.clearBuildings();
+
+        // Restore buildings
         for (let building of loadedState.buildings) {
-            // Use the createBuilding function to recreate the building
-            eventBus.emit('attemptToBuild', {
-                name: building.name,
-                level: building.level,
-                underConstruction: building.underConstruction,
-                isUpgrade: building.isUpgrade
-            });
+            eventBus.emit('restoreBuilding', building);
         }
 
         // Clear the building queue first
@@ -82,7 +77,6 @@ class GameStateManager {
                 this.buildingManager.addToQueue(building);
             }
         }
-
         console.log('Game state set');
     }
 
