@@ -48,7 +48,7 @@ class GameStateManager {
     setGameState(loadedState) {
         // events to set resources, buildings and queue
         eventBus.emit('setResources', loadedState.resources);
-        eventBus.emit('clearBuilding');
+        eventBus.emit('clearBuildings');
         eventBus.emit('setBuildings', loadedState.buildings);
         eventBus.emit('setBuildingQueue', loadedState.queue);
 

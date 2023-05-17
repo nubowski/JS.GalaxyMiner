@@ -56,7 +56,7 @@ class BuildingManager {
 
         eventBus.on('attemptToUpgrade', ({buildingID, buildings}) => this.upgradeBuilding(buildingID, buildings));
         eventBus.on('setBuildingQueue', this.setBuildingQueue.bind(this));
-        eventBus.on('clearBuilding', this.clearBuildings);
+        eventBus.on('clearBuildings', this.clearBuildings);
     }
 
     updateProducers() {

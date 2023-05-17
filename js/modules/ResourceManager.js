@@ -12,7 +12,8 @@ class ResourceManager {
 
         eventBus.on('createResource', this.createResource.bind(this));
         eventBus.on('updateResource', this.updateResource.bind(this));
-        eventBus.on("produceResource", this.produceResource.bind(this));
+        eventBus.on('produceResource', this.produceResource.bind(this));
+        eventBus.on('setResources', this.setResources.bind(this));
     }
 
     getResourceByName(resourceType) {
@@ -74,6 +75,13 @@ class ResourceManager {
             name: resource.name,
             quantity: resource.quantity,
         }));
+    }
+
+    setResources(resourceDataArray) {
+        this.resourceInstances = [];
+        resourceDataArray.forEach(resourceData => {
+            this.createResource(resourceData);
+        });
     }
 }
 
