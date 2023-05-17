@@ -3,19 +3,24 @@ import {DEFAULT_BUILDING_LEVEL, DEFAULT_CONSTRUCTION_TIME, UPGRADE_COST_MULTIPLI
 
 class Building {
     static idCounter = 0;
-    constructor({ name, space, cost, level = DEFAULT_BUILDING_LEVEL, constructionTime = DEFAULT_CONSTRUCTION_TIME }) {
+    constructor({ name, space, cost, level = DEFAULT_BUILDING_LEVEL, constructionTime = DEFAULT_CONSTRUCTION_TIME, type}, resourceManager) {
+        if (!resourceManager) {
+            throw new Error('ResourceManager is undefined');
+        }
         this.id = Building.idCounter++;
         this.status = "idle";
         this.name = name;
         this.space = space;
         this.level = level;
+        this.type = type;
         this.constructionTime = constructionTime;
+        this.resourceManager = resourceManager;
+        this.remainingTime = this.constructionTime;
         this.cost = cost.map(resourceObj => ({
-            resource: resourceObj.resource,
+            resource: resourceManager.getResourceByName(resourceObj.resource.name),
             baseCost: resourceObj.baseCost,
             amount: resourceObj.baseCost
         }));
-        this.remainingTime = this.constructionTime;
 
         eventBus.on('spaceReserved', (building) => {
             if (building === this) {
@@ -57,7 +62,7 @@ class Building {
 
     hasSufficientResources() {
         for (let resourceObj of this.cost){
-            if (!resourceObj.resource.canSubtract(resourceObj.amount)) {
+            if (!this.resourceManager.canSubtract(resourceObj.resource.name, resourceObj.amount)) {
                 return false;
             }
         }
@@ -65,8 +70,8 @@ class Building {
     }
 
     subtractResourcesForBuilding() {
-        for (let resourceObj of this.cost) {
-            resourceObj.resource.subtractQuantity(resourceObj.amount);
+        for (let resourceObj of this.cost){
+            this.resourceManager.subtractQuantity(resourceObj.resource.name, resourceObj.baseCost);
         }
     }
 }

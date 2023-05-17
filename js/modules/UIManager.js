@@ -10,16 +10,28 @@ class UImanager {
         eventBus.on('updateQueueDisplay', (queue) => this.updateQueueDisplay(queue));
         eventBus.on('updateDisplay', ({resources, buildingManager}) => this.updateDisplay(resources, buildingManager));
         eventBus.on('createBuildButtons', () => this.generateBuildingButtons());
+        eventBus.on('gameLoaded', (gameState) => {
+            this.updateBuildingDisplay(gameState.buildings);
+            this.updateResourceDisplay(gameState.resources);
+            this.updateSpaceDisplay(gameState.buildingManager);
+        });
     }
 
     generateBuildingButtons() {
         const container = document.getElementById('buttonContainer');
+
         for (let buildingTemplate of this.buildingTemplates) {
             let buildButton = document.createElement('button');
             buildButton.id = `build-${buildingTemplate.name}`;  // give the button a unique id
             buildButton.textContent = `Build ${buildingTemplate.name}`;
             container.appendChild(buildButton);
         }
+
+        // Create a reset button
+        let resetButton = document.createElement('button');
+        resetButton.id = 'reset-game';  // give the button a unique id
+        resetButton.textContent = 'Reset Game';
+        container.appendChild(resetButton);
     }
 
     updateResourceDisplay(resources) {

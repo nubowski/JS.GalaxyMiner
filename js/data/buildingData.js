@@ -24,7 +24,7 @@ const buildingData = {
             {resource: 'Carbon', baseCost: 50}
         ]
     }
-    // more buildings as needed
+    // more buildings
 };
 
 export default buildingData;

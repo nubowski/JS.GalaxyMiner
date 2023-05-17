@@ -1,9 +1,8 @@
+import ResourceManager from "./modules/ResourceManager.js";
 import eventBus from './eventBus/EventBus.js';
 import TimerManager from './modules/TimerManager.js';
 import GameLog from './modules/GameLog.js';
-import resourceData from './data/resourceData.js';
 import buildingData from './data/buildingData.js';
-import createBuilding from './utils/buildingFactory.js';
 import BuildingManager from './modules/BuildingManager.js';
 import UIManager from './modules/UIManager.js';
 import UserInputManager from './modules/UserInputManager.js';
@@ -12,19 +11,18 @@ import SaveManager from "./modules/SaveManager.js";
 
 // Init Instances
 let buildingTemplates = Object.values(buildingData);
-let resourceInstances = Object.values(resourceData);
+let resourceManager = new ResourceManager();  // ResourceManager will initialize the resources
 
 let timerManager = new TimerManager();
 let saveManager = new SaveManager();
 let uiManager = new UIManager(buildingTemplates);
 let userInputManager = new UserInputManager(buildingTemplates);
 
-let buildingManager = new BuildingManager(buildingTemplates, resourceInstances);
-let gameStateManger = new GameStateManager(resourceInstances, buildingManager);
+let buildingManager = new BuildingManager(buildingTemplates, resourceManager);
+let gameStateManger = new GameStateManager(resourceManager, buildingManager);
 
 eventBus.emit('createBuildButtons');
 eventBus.emit('onClickListener', buildingTemplates);
-
 
 // DOM-related interactions
 document.addEventListener('DOMContentLoaded', () => {
@@ -38,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
     timerManager.start();
 
     // Update the UI with the initial state of the game
-    uiManager.updateDisplay(resourceInstances, buildingManager);
+    uiManager.updateDisplay(resourceManager.getResourceData(), buildingManager);  // Use ResourceManager's method
 
     eventBus.emit('LoadGame');
 
