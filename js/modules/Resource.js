@@ -1,16 +1,9 @@
-import eventBus from "../eventBus/EventBus.js";
-import resourceData from "../data/resourceData.js";
+
 
 class Resource {
-    constructor(name, quantity, resources) {
+    constructor(name, quantity) {
         this.name = name;
         this.quantity = quantity;
-
-        eventBus.on("produceResource", ({ resourceType, productionRate }) => {
-            if (resourceType === this.name) {
-                this.produce(productionRate);
-            }
-        });
     }
 }
 

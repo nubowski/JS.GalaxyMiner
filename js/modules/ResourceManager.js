@@ -10,8 +10,12 @@ class ResourceManager {
         eventBus.on("produceResource", this.produceResource.bind(this));
     }
 
+    getResourceByName(resourceType) {
+        return this.resourceInstances.find(res => res.name === resourceType);
+    }
+
     produceResource ({resourceType, productionRate}) {
-        let resource = this.resourceInstances.find(res => res.name === resourceType);
+        let resource = this.getResourceByName(resourceType);
         if (resource) {
             resource.quantity += productionRate;
             this.emitResourceUpdate();
@@ -25,15 +29,15 @@ class ResourceManager {
     }
 
     updateResource (name, quantity) {
-       let resource = this.resourceInstances.find(ri => ri.name === name);
-       if (resource) {
-           resource.quantity = quantity;
-           this.emitResourceUpdate();
-       }
+        let resource = this.getResourceByName(name);
+        if (resource) {
+            resource.quantity = quantity;
+            this.emitResourceUpdate();
+        }
     }
 
     addQuantity(resourceType, amount) {
-        let resource = this.resourceInstances.find(res => res.name === resourceType);
+        let resource = this.getResourceByName(resourceType);
         if (resource) {
             resource.quantity += amount;
             this.emitResourceUpdate();
@@ -41,7 +45,7 @@ class ResourceManager {
     }
 
     subtractQuantity(resourceType, amount) {
-        let resource = this.resourceInstances.find(res => res.name === resourceType);
+        let resource = this.getResourceByName(resourceType);
         if (resource && resource.quantity >= amount) {
             resource.quantity -= amount;
             this.emitResourceUpdate();
@@ -52,7 +56,7 @@ class ResourceManager {
     }
 
     canSubtract(resourceType, amount) {
-        let resource = this.resourceInstances.find(res => res.name === resourceType);
+        let resource = this.getResourceByName(resourceType);
         return resource && resource.quantity >= amount;
     }
 
