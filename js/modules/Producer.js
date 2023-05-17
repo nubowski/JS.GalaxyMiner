@@ -3,8 +3,8 @@ import Building from "./Building.js";
 
 
 class Producer extends Building {
-    constructor({name, space, resourceType, productionRate, cost, level = DEFAULT_BUILDING_LEVEL, constructionTime = DEFAULT_CONSTRUCTION_TIME, type}) {
-        super({name, space, cost, level, constructionTime, type});
+    constructor({name, space, resourceType, productionRate, cost, level = DEFAULT_BUILDING_LEVEL, constructionTime = DEFAULT_CONSTRUCTION_TIME, type}, resourceManager) {
+        super({name, space, cost, level, constructionTime, type}, resourceManager);
         this.resourceType = resourceType;
         this.productionRate = productionRate;
         this.underConstruction = false;

@@ -29,7 +29,9 @@ class BuildingManager {
             }
             // new building
             let newBuilding = createBuilding(buildingData.type, buildingData, this.resources);
+            console.log('BuildingManager, after creating new building:', newBuilding);
             // add new building to the queue
+            console.log('BuildingManager, before adding to queue:', newBuilding);
             if (this.canAddToQueue(newBuilding)) {
                 this.addToQueue(newBuilding);
             } else {
@@ -89,14 +91,17 @@ class BuildingManager {
     }
 
     addToQueue(building, isUpgrade = false) {
+        console.log('BuildingManager, start of addToQueue method, building:', building);
         if (this.canAddToQueue(building) && building.hasSufficientResources()) {
             building.remainingTime = building.constructionTime;
             building.isUpgrade = isUpgrade;
             this.queue.push(building);
+            console.log(`BuildingManager, addToQueue, queue after adding building: `, this.queue);
             building.subtractResourcesForBuilding();
             if (!isUpgrade) {
                 this.reservedSpaces += building.space;
             }
+            console.log(`BuildingManager, addToQueue, reservedSpaces: `, this.reservedSpaces);
             eventBus.emit('updateQueueDisplay', this.queue);
             eventBus.emit('constructionStarted', building);
             eventBus.emit('buildingSpaceUpdated', this);
@@ -146,6 +151,7 @@ class BuildingManager {
             const building = buildings[buildingIndex];
             if (building.hasSufficientResources() && !building.underConstruction) {
                 if (this.addToQueue(building, true)) { // Only subtract resources if building is added to queue
+                    console.log('BuildingManager, before subtractResourcesForBuilding:', building);
                     building.subtractResourcesForBuilding();
                     building.underConstruction = true; // Mark the building as under construction
                 } else {
