@@ -14,7 +14,7 @@ class BuildingManager {
         this.queue = [];
         this.maxSize = maxSize;
 
-        eventBus.on('requestCreateBuildings', ({buildingsData, gameState}) => {
+        eventBus.on('setBuildings', ({buildingsData, gameState}) => {
             gameState.buildings = buildingsData.map(
                 buildingData => createBuilding(buildingData.type, {...buildingData}, this.resources)
             );
@@ -55,6 +55,8 @@ class BuildingManager {
         });
 
         eventBus.on('attemptToUpgrade', ({buildingID, buildings}) => this.upgradeBuilding(buildingID, buildings));
+        eventBus.on('setBuildingQueue', this.setBuildingQueue.bind(this));
+        eventBus.on('clearBuilding', this.clearBuildings);
     }
 
     updateProducers() {
@@ -159,6 +161,16 @@ class BuildingManager {
             }
         } else {
             console.error(`Building with ID: ${buildingID} not found`);
+        }
+    }
+
+    setBuildingQueue(queue) {
+        this.queue = [];
+        for (let id of queue) {
+            let building = this.getBuiltBuildings().find(building => building.id === id);
+            if (building) {
+                this.addToQueue(building);
+            }
         }
     }
 

@@ -1,4 +1,7 @@
-import eventBus from "../eventBus/EventBus.js";
+let initialResources = [
+    {name: 'Metal', quantity: 1000},
+    {name: 'Carbon', quantity: 1000},
+    // more resources here...
+];
 
-eventBus.emit('createResource', {name: 'Metal', quantity: 1000});
-eventBus.emit('createResource', {name: 'Carbon', quantity: 1000});
+export default initialResources;

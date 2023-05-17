@@ -1,9 +1,14 @@
 import Resource from "./Resource.js";
 import eventBus from "../eventBus/EventBus.js";
+import initialResources from "../data/resourceData.js";
 
 class ResourceManager {
     constructor() {
         this.resourceInstances = [];
+
+        initialResources.forEach(resourceData => {
+            this.createResource(resourceData);
+        });
 
         eventBus.on('createResource', this.createResource.bind(this));
         eventBus.on('updateResource', this.updateResource.bind(this));
