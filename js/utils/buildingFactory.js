@@ -6,8 +6,10 @@ const createBuilding = (type, building, resources) => {
         let resource;
         if (typeof costObj.resource === 'string') {
             // If resource is a string, find the Resource object by name
-            resource = resources.find(res => res.name === costObj.resource);
-            if (!resource) throw Error(`Unknown resource: ${costObj.resource}`);
+            resource = resources.resourceInstances.find(res => res.name === costObj.resource);
+            if (!resource) {
+                throw Error(`Unknown resource: ${costObj.resource}`);
+            }
         } else {
             // If resource is an object, use it directly
             resource = costObj.resource;
@@ -17,13 +19,11 @@ const createBuilding = (type, building, resources) => {
 
     const newBuilding = {...building, cost: newCost};
 
-    console.log('Building type:', type, 'Building data:', newBuilding);
-
     switch (type) {
         case 'Building':
-            return new Building(newBuilding);
+            return new Building(newBuilding, resources);
         case 'Producer':
-            return new Producer(newBuilding);
+            return new Producer(newBuilding, resources);
         default:
             throw Error(`Unknown Building Type: ${type}`);
     }
