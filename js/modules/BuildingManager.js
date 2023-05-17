@@ -14,8 +14,8 @@ class BuildingManager {
         this.queue = [];
         this.maxSize = maxSize;
 
-        eventBus.on('setBuildings', ({buildingsData, gameState}) => {
-            gameState.buildings = buildingsData.map(
+        eventBus.on('setBuildings', (buildingData) => {
+            this.buildings = buildingData.map(
                 buildingData => createBuilding(buildingData.type, {...buildingData}, this.resources)
             );
         });
@@ -50,7 +50,7 @@ class BuildingManager {
 
         eventBus.on('attemptToUpgrade', ({buildingID, buildings}) => this.upgradeBuilding(buildingID, buildings));
         eventBus.on('setBuildingQueue', this.setBuildingQueue.bind(this));
-        eventBus.on('clearBuildings', this.clearBuildings);
+        eventBus.on('clearBuildings', this.clearBuildings.bind(this));
     }
 
     updateProducers() {

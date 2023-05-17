@@ -43,6 +43,9 @@ class GameStateManager {
     }
 
     setGameState(loadedState) {
+        console.log('Loaded State: ', loadedState);
+        console.log('Loaded Buildings: ', loadedState.buildings);
+
         // events to set resources, buildings and queue
         eventBus.emit('setResources', loadedState.resources);
         eventBus.emit('clearBuildings');
