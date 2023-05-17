@@ -14,20 +14,21 @@ class BuildingManager {
         this.queue = [];
         this.maxSize = maxSize;
 
+        eventBus.on('setBuildings', ({buildingsData, gameState}) => {
+            gameState.buildings = buildingsData.map(
+                buildingData => createBuilding(buildingData.type, {...buildingData}, this.resources)
+            );
+        });
+
         eventBus.on('attemptToBuild', (buildingInfo) => {
+            console.log('BuildingManager, attemptToBuild event, buildingInfo:', buildingInfo);
             let buildingData = this.buildingTemplates.find(template => template.name === buildingInfo.name);
             if (!buildingData) {
                 console.error(`Unknown building: ${buildingInfo.name}`);
                 return;
             }
-            // new building
             let newBuilding = createBuilding(buildingData.type, buildingData, this.resources);
-            // add new building to the queue
-            if (this.canAddToQueue(newBuilding)) {
-                this.addToQueue(newBuilding);
-            } else {
-                console.error(`Not enough space or queue is full.`);
-            }
+            this.addToQueue(newBuilding);
         });
 
         eventBus.on('timerTick', () => {
@@ -41,16 +42,15 @@ class BuildingManager {
                     building.underConstruction = false;
                     eventBus.emit('buildingUpdated', this.getBuiltBuildings());
                 }
-
                 // Emit 'queueUpdated' event whenever the timer ticks
                 eventBus.emit('updateQueueDisplay', this.queue);
-
-                // Update all producers
             }
             this.updateProducers();
         });
 
         eventBus.on('attemptToUpgrade', ({buildingID, buildings}) => this.upgradeBuilding(buildingID, buildings));
+        eventBus.on('setBuildingQueue', this.setBuildingQueue.bind(this));
+        eventBus.on('clearBuildings', this.clearBuildings);
     }
 
     updateProducers() {
@@ -64,8 +64,12 @@ class BuildingManager {
         }
     }
 
-    canAddToQueue(building) {
-        return (this.queue.length < this.maxSize) && (this.usedSpaces +this.reservedSpaces + building.space <= this.maxSpaces); // TODO too complex shit. Just add `space` param while its in queue
+    canAddToQueue(building, isUpgrade = false) {
+        if (isUpgrade) {
+            return this.queue.length < this.maxSize;
+        } else {
+            return (this.queue.length < this.maxSize) && (this.usedSpaces + this.reservedSpaces + building.space <= this.maxSpaces);
+        }
     }
 
     canReserveSpace(building) {
@@ -83,7 +87,7 @@ class BuildingManager {
     }
 
     addToQueue(building, isUpgrade = false) {
-        if (this.canAddToQueue(building) && building.hasSufficientResources()) {
+        if (this.canAddToQueue(building, isUpgrade) && building.hasSufficientResources()) {
             building.remainingTime = building.constructionTime;
             building.isUpgrade = isUpgrade;
             this.queue.push(building);
@@ -96,6 +100,7 @@ class BuildingManager {
             eventBus.emit('buildingSpaceUpdated', this);
             return true;
         } else {
+            console.error('Did not pass addToQueue checks!');
             return false;
         }
     }
@@ -131,7 +136,6 @@ class BuildingManager {
             eventBus.emit('buildingSpaceUpdated', this);
         } else {
             console.log("Not enough space to add building.");
-            // Emit an error event or handle this error in another way
         }
     }
 
@@ -156,6 +160,16 @@ class BuildingManager {
             }
         } else {
             console.error(`Building with ID: ${buildingID} not found`);
+        }
+    }
+
+    setBuildingQueue(queue) {
+        this.queue = [];
+        for (let id of queue) {
+            let building = this.getBuiltBuildings().find(building => building.id === id);
+            if (building) {
+                this.addToQueue(building);
+            }
         }
     }
 

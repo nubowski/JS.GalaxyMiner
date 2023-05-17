@@ -1,8 +1,7 @@
-import Resource from "../modules/Resource.js";
+let initialResources = [
+    {name: 'Metal', quantity: 1000},
+    {name: 'Carbon', quantity: 1000},
+    // more resources here...
+];
 
-let metal = new Resource('Metal', 1000);
-let carbon = new Resource('Carbon', 1000);
-
-const resourceInstances = [metal, carbon];
-
-export default resourceInstances;
+export default initialResources;

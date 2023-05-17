@@ -6,6 +6,7 @@ class UserInputManager {
 
         eventBus.on('onClickListener', (buildingTemplates) => this.attachEventHandlers(buildingTemplates));
         eventBus.on('upgradeButtonCreated', ({buttonId, buildings}) => this.attachUpgradeEventHandler(buttonId, buildings));
+        eventBus.on('buildingAdded', ({templates}) => this.attachEventHandlers(templates));
     }
 
     attachEventHandlers(buildingTemplates) {
@@ -15,6 +16,12 @@ class UserInputManager {
                 eventBus.emit('attemptToBuild', buildingTemplate);
             };
         }
+
+        // Attach event handler to reset button
+        let resetButton = document.getElementById('reset-game');
+        resetButton.onclick = () => {
+            eventBus.emit('ResetGame');
+        };
     }
 
     attachUpgradeEventHandler(buttonId, buildings) {

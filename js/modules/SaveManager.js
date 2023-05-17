@@ -10,7 +10,6 @@ class SaveManager {
     }
 
     saveGame() {
-        console.log('SaveGame event emitted');
         eventBus.emit('getGameState');
     }
 
@@ -24,7 +23,6 @@ class SaveManager {
     }
 
     loadGame() {
-        console.log('LoadGame event received');
         try {
             const serializedState = localStorage.getItem('gameState');
             if (serializedState === null) {
@@ -41,6 +39,7 @@ class SaveManager {
 
     resetGame() {
         localStorage.removeItem('gameState');
+        location.reload();
     }
 }
 
