@@ -27,16 +27,8 @@ class BuildingManager {
                 console.error(`Unknown building: ${buildingInfo.name}`);
                 return;
             }
-            // new building
             let newBuilding = createBuilding(buildingData.type, buildingData, this.resources);
-            console.log('BuildingManager, after creating new building:', newBuilding);
-            // add new building to the queue
-            console.log('BuildingManager, before adding to queue:', newBuilding);
-            if (this.canAddToQueue(newBuilding)) {
-                this.addToQueue(newBuilding);
-            } else {
-                console.error(`Not enough space or queue is full.`);
-            }
+            this.addToQueue(newBuilding);
         });
 
         eventBus.on('timerTick', () => {
@@ -73,7 +65,13 @@ class BuildingManager {
     }
 
     canAddToQueue(building) {
-        return (this.queue.length < this.maxSize) && (this.usedSpaces +this.reservedSpaces + building.space <= this.maxSpaces); // TODO too complex shit. Just add `space` param while its in queue
+        const canAddBasedOnSize = (this.queue.length < this.maxSize);
+        const canAddBasedOnSpace = (this.usedSpaces + this.reservedSpaces + building.space <= this.maxSpaces);
+
+        console.log('Can add to queue based on size:', canAddBasedOnSize);
+        console.log('Can add to queue based on space:', canAddBasedOnSpace);
+
+        return canAddBasedOnSize && canAddBasedOnSpace;
     }
 
     canReserveSpace(building) {
@@ -91,22 +89,20 @@ class BuildingManager {
     }
 
     addToQueue(building, isUpgrade = false) {
-        console.log('BuildingManager, start of addToQueue method, building:', building);
         if (this.canAddToQueue(building) && building.hasSufficientResources()) {
             building.remainingTime = building.constructionTime;
             building.isUpgrade = isUpgrade;
             this.queue.push(building);
-            console.log(`BuildingManager, addToQueue, queue after adding building: `, this.queue);
             building.subtractResourcesForBuilding();
             if (!isUpgrade) {
                 this.reservedSpaces += building.space;
             }
-            console.log(`BuildingManager, addToQueue, reservedSpaces: `, this.reservedSpaces);
             eventBus.emit('updateQueueDisplay', this.queue);
             eventBus.emit('constructionStarted', building);
             eventBus.emit('buildingSpaceUpdated', this);
             return true;
         } else {
+            console.error('Did not pass addToQueue checks!');
             return false;
         }
     }
@@ -151,7 +147,6 @@ class BuildingManager {
             const building = buildings[buildingIndex];
             if (building.hasSufficientResources() && !building.underConstruction) {
                 if (this.addToQueue(building, true)) { // Only subtract resources if building is added to queue
-                    console.log('BuildingManager, before subtractResourcesForBuilding:', building);
                     building.subtractResourcesForBuilding();
                     building.underConstruction = true; // Mark the building as under construction
                 } else {

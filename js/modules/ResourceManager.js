@@ -62,9 +62,7 @@ class ResourceManager {
     }
 
     canSubtract(resourceType, amount) {
-        console.log(`ResourceManager, canSubtract, resourceType: ${resourceType}, amount: ${amount}`);
         let resource = this.getResourceByName(resourceType);
-        console.log(`ResourceManager, canSubtract, resource: `, resource);
         return resource && resource.quantity >= amount;
     }
 

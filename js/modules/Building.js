@@ -13,10 +13,14 @@ class Building {
         this.space = space;
         this.level = level;
         this.type = type;
-        this.cost = cost;
         this.constructionTime = constructionTime;
         this.resourceManager = resourceManager;
         this.remainingTime = this.constructionTime;
+        this.cost = cost.map(resourceObj => ({
+            resource: resourceManager.getResourceByName(resourceObj.resource.name),
+            baseCost: resourceObj.baseCost,
+            amount: resourceObj.baseCost
+        }));
 
         eventBus.on('spaceReserved', (building) => {
             if (building === this) {
@@ -66,8 +70,8 @@ class Building {
     }
 
     subtractResourcesForBuilding() {
-        for (let resourceObj of this.cost) {
-            resourceObj.resourceManager.subtractQuantity(resourceObj.amount);
+        for (let resourceObj of this.cost){
+            this.resourceManager.subtractQuantity(resourceObj.resource.name, resourceObj.baseCost);
         }
     }
 }

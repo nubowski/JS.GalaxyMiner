@@ -15,7 +15,6 @@ class GameStateManager {
     }
 
     getGameState() {
-        console.log('GameStateManager, getGameState method');
         let gameState = {};
 
         // save resources
@@ -39,8 +38,6 @@ class GameStateManager {
 
         // save building queue
         gameState.queue = this.buildingManager.getQueue().map(building => building.id);
-
-        console.log('GameStateManager, getGameState, gameState:', gameState);
 
         return gameState;
     }

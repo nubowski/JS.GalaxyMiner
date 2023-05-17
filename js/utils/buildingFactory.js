@@ -2,8 +2,6 @@ import Building from "../modules/Building.js";
 import Producer from "../modules/Producer.js";
 
 const createBuilding = (type, building, resources) => {
-    console.log('Resources:', resources);
-
     const newCost = building.cost.map(costObj => {
         let resource;
         if (typeof costObj.resource === 'string') {
@@ -19,11 +17,7 @@ const createBuilding = (type, building, resources) => {
         return {...costObj, resource};
     });
 
-    console.log('New cost:', newCost);
-
     const newBuilding = {...building, cost: newCost};
-
-    console.log('Building type:', type, 'Building data:', newBuilding);
 
     switch (type) {
         case 'Building':

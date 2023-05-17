@@ -14,7 +14,6 @@ class SaveManager {
     }
 
     prepareGameState (gameState) {
-        console.log('SaveManager, prepareGameState, gameState:', gameState);
         try {
             const serializedState = JSON.stringify(gameState);
             localStorage.setItem('gameState', serializedState);
