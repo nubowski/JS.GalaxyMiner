@@ -64,14 +64,12 @@ class BuildingManager {
         }
     }
 
-    canAddToQueue(building) {
-        const canAddBasedOnSize = (this.queue.length < this.maxSize);
-        const canAddBasedOnSpace = (this.usedSpaces + this.reservedSpaces + building.space <= this.maxSpaces);
-
-        console.log('Can add to queue based on size:', canAddBasedOnSize);
-        console.log('Can add to queue based on space:', canAddBasedOnSpace);
-
-        return canAddBasedOnSize && canAddBasedOnSpace;
+    canAddToQueue(building, isUpgrade = false) {
+        if (isUpgrade) {
+            return this.queue.length < this.maxSize;
+        } else {
+            return (this.queue.length < this.maxSize) && (this.usedSpaces + this.reservedSpaces + building.space <= this.maxSpaces);
+        }
     }
 
     canReserveSpace(building) {
@@ -89,7 +87,7 @@ class BuildingManager {
     }
 
     addToQueue(building, isUpgrade = false) {
-        if (this.canAddToQueue(building) && building.hasSufficientResources()) {
+        if (this.canAddToQueue(building, isUpgrade) && building.hasSufficientResources()) {
             building.remainingTime = building.constructionTime;
             building.isUpgrade = isUpgrade;
             this.queue.push(building);
