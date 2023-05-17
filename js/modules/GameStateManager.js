@@ -15,6 +15,7 @@ class GameStateManager {
     }
 
     getGameState() {
+        console.log('GameStateManager, getGameState method');
         let gameState = {};
 
         // save resources
@@ -42,14 +43,13 @@ class GameStateManager {
         // save building queue
         gameState.queue = this.buildingManager.getQueue().map(building => building.id);
 
-        console.log('Game state:', gameState);
+        console.log('GameStateManager, getGameState, gameState:', gameState);
 
 
         return gameState;
     }
 
     setGameState(loadedState) {
-        console.log('Setting game state:', loadedState);
 
         // Set resources
         for (let resource of loadedState.resources) {
@@ -57,6 +57,10 @@ class GameStateManager {
             let resourceInstance = this.resourceInstances.find(ri => ri.name === resource.name);
             if (resourceInstance) {
                 resourceInstance.quantity = resource.quantity;
+            } else {
+                // If the resource instance is not found, create a new one
+                let newResourceInstance = new Resource(resource.name, resource.quantity);
+                this.resourceInstances.push(newResourceInstance);
             }
         }
 
@@ -64,9 +68,7 @@ class GameStateManager {
         this.buildingManager.clearBuildings();
 
         // Restore buildings
-        for (let building of loadedState.buildings) {
-            eventBus.emit('restoreBuilding', building);
-        }
+        eventBus.emit('requestCreateBuildings', {buildingsData: loadedState.buildings, gameState: loadedState});
 
         // Clear the building queue first
         this.buildingManager.queue = [];
@@ -77,6 +79,7 @@ class GameStateManager {
                 this.buildingManager.addToQueue(building);
             }
         }
+        eventBus.emit('gameLoaded', loadedState); // Include the entire game state
         console.log('Game state set');
     }
 

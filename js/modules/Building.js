@@ -3,12 +3,13 @@ import {DEFAULT_BUILDING_LEVEL, DEFAULT_CONSTRUCTION_TIME, UPGRADE_COST_MULTIPLI
 
 class Building {
     static idCounter = 0;
-    constructor({ name, space, cost, level = DEFAULT_BUILDING_LEVEL, constructionTime = DEFAULT_CONSTRUCTION_TIME }) {
+    constructor({ name, space, cost, level = DEFAULT_BUILDING_LEVEL, constructionTime = DEFAULT_CONSTRUCTION_TIME, type }) {
         this.id = Building.idCounter++;
         this.status = "idle";
         this.name = name;
         this.space = space;
         this.level = level;
+        this.type = type;
         this.constructionTime = constructionTime;
         this.cost = cost.map(resourceObj => ({
             resource: resourceObj.resource,

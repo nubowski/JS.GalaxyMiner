@@ -27,5 +27,4 @@ const buildingData = {
     // more buildings
 };
 
-
 export default buildingData;

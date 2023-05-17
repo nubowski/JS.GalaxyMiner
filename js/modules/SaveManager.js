@@ -14,6 +14,7 @@ class SaveManager {
     }
 
     prepareGameState (gameState) {
+        console.log('SaveManager, prepareGameState, gameState:', gameState);
         try {
             const serializedState = JSON.stringify(gameState);
             localStorage.setItem('gameState', serializedState);
@@ -29,8 +30,7 @@ class SaveManager {
                 eventBus.emit('newGame');
             } else {
                 let restoredGame = JSON.parse(serializedState);
-                // Request the creation of buildings
-                eventBus.emit('requestCreateBuildings', {buildingsData: restoredGame.buildings, gameState: restoredGame});
+                eventBus.emit('setGameState', restoredGame);
             }
         } catch (err) {
             console.error('Error loading state: ', err);

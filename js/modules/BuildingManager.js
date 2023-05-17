@@ -18,11 +18,10 @@ class BuildingManager {
             gameState.buildings = buildingsData.map(
                 buildingData => createBuilding(buildingData.type, {...buildingData}, this.resources)
             );
-            eventBus.emit('setGameState', gameState);
-            eventBus.emit('gameLoaded', gameState); // Include the entire game state
         });
 
         eventBus.on('attemptToBuild', (buildingInfo) => {
+            console.log('BuildingManager, attemptToBuild event, buildingInfo:', buildingInfo);
             let buildingData = this.buildingTemplates.find(template => template.name === buildingInfo.name);
             if (!buildingData) {
                 console.error(`Unknown building: ${buildingInfo.name}`);
@@ -56,7 +55,6 @@ class BuildingManager {
         });
 
         eventBus.on('attemptToUpgrade', ({buildingID, buildings}) => this.upgradeBuilding(buildingID, buildings));
-        eventBus.on('restoreBuilding', (buildingData) => {this.addBuildingDirectly(buildingData);});
     }
 
     updateProducers() {
@@ -162,16 +160,6 @@ class BuildingManager {
         } else {
             console.error(`Building with ID: ${buildingID} not found`);
         }
-    }
-
-    addBuildingDirectly(building) {
-        if (this.usedSpaces + building.space <= this.maxSpaces) {
-            this.buildings.push(building);
-            this.usedSpaces += building.space;
-            eventBus.emit('buildingAdded', {building: building, templates: this.buildingTemplates});
-            return true;
-        }
-        return false;
     }
 
     clearBuildings() {
