@@ -1,6 +1,7 @@
 import eventBus from '../eventBus/EventBus.js';
 import {MAX_BUILDING_SPACE, DEFAULT_BUILDING_LEVEL, DEFAULT_QUEUE_SIZE} from "../data/constants.js";
 import createBuilding from "../utils/buildingFactory.js";
+import Building from "./Building.js";
 import Producer from "./Producer.js";
 
 class BuildingManager {
@@ -137,6 +138,7 @@ class BuildingManager {
         const buildingIndex = buildings.findIndex(building => building.id === buildingID);
         if (buildingIndex !== -1) {
             const building = buildings[buildingIndex];
+            console.log('Building instance:', building instanceof Building);
             if (building.hasSufficientResources() && !building.underConstruction) {
                 if (this.addToQueue(building, true)) { // Only subtract resources if building is added to queue
                     building.subtractResourcesForBuilding();
@@ -162,7 +164,7 @@ class BuildingManager {
             building => createBuilding(building.type, {...building}, this.resources)
         );
 
-        eventBus.emit('buildingUpdated', loadedState.buildings);
+        eventBus.emit('buildingUpdated', this.buildings);
 
         this.setBuildingQueue(loadedState.queue);
 

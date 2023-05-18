@@ -71,7 +71,7 @@ class UImanager {
 
             let buildingDiv = document.createElement('div');
             buildingDiv.classList.add('built-building');
-            buildingDiv.textContent = `${building.name} - Level: ${building.level}`;
+            buildingDiv.textContent = `${building.name} - Level: ${building.level}, ID: ${building.id}`;
             buildingWrapper.appendChild(buildingDiv);
 
             // Create and append upgrade button
