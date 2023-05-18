@@ -14,12 +14,6 @@ class BuildingManager {
         this.queue = [];
         this.maxSize = maxSize;
 
-        eventBus.on('setBuildings', (buildingData) => {
-            this.buildings = buildingData.map(
-                buildingData => createBuilding(buildingData.type, {...buildingData}, this.resources)
-            );
-        });
-
         eventBus.on('attemptToBuild', (buildingInfo) => {
             console.log('BuildingManager, attemptToBuild event, buildingInfo:', buildingInfo);
             let buildingData = this.buildingTemplates.find(template => template.name === buildingInfo.name);
@@ -49,7 +43,7 @@ class BuildingManager {
         });
 
         eventBus.on('attemptToUpgrade', ({buildingID, buildings}) => this.upgradeBuilding(buildingID, buildings));
-        eventBus.on('setBuildingQueue', this.setBuildingQueue.bind(this));
+        eventBus.on('restoreBuildings', this.restoreBuildings.bind(this));
         eventBus.on('clearBuildings', this.clearBuildings.bind(this));
     }
 
@@ -163,6 +157,23 @@ class BuildingManager {
         }
     }
 
+    restoreBuildings (loadedState) {
+        this.buildings = loadedState.buildings.map(
+            building => createBuilding(building.type, {...building}, this.resources)
+        );
+
+        eventBus.emit('buildingUpdated', loadedState.buildings);
+
+        this.setBuildingQueue(loadedState.queue);
+
+        eventBus.emit('updateQueueDisplay', loadedState.queue);
+
+        this.updateSpaces();
+
+        eventBus.emit('buildingManagerRestored');
+
+    }
+
     setBuildingQueue(queue) {
         this.queue = [];
         for (let id of queue) {
@@ -178,6 +189,25 @@ class BuildingManager {
         this.queue = [];
         this.usedSpaces = 0;
         this.reservedSpaces = 0;
+    }
+
+    updateSpaces() {
+        // Reset the used and reserved spaces
+        this.usedSpaces = 0;
+        this.reservedSpaces = 0;
+
+        // buildings and update the used and reserved spaces
+        for (let building of this.buildings) {
+            if (building.underConstruction) {
+                this.reservedSpaces += building.space;
+            } else {
+                this.usedSpaces += building.space;
+            }
+        }
+        // update reserved spaces based on buildings in queue
+        for (let building of this.queue) {
+            this.reservedSpaces += building.space;
+        }
     }
 
     getBuiltBuildings() {

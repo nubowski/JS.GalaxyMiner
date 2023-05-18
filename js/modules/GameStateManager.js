@@ -49,10 +49,11 @@ class GameStateManager {
         // events to set resources, buildings and queue
         eventBus.emit('setResources', loadedState.resources);
         eventBus.emit('clearBuildings');
-        eventBus.emit('setBuildings', loadedState.buildings);
-        eventBus.emit('setBuildingQueue', loadedState.queue);
+        eventBus.emit('restoreBuildings', loadedState);
 
-        eventBus.emit('gameLoaded', loadedState); // the entire game state
+        eventBus.on('buildingManagerRestored', () => {
+            eventBus.emit('gameLoaded', this.getGameState());
+        });
         console.log('Game state set');
     }
 }
