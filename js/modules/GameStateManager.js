@@ -1,4 +1,5 @@
 import eventBus from "../eventBus/EventBus.js";
+import Building from "./Building.js"; // TODO move it away or make a hybrid game state - event system
 
 class GameStateManager {
     constructor(resourceManager, buildingManager) {
@@ -34,6 +35,7 @@ class GameStateManager {
             cost: building.cost,
             underConstruction: building.underConstruction,
             isUpgrade: building.isUpgrade,
+            currentBuildingId: Building.idCounter,
         }));
 
         // save building queue
@@ -43,13 +45,19 @@ class GameStateManager {
     }
 
     setGameState(loadedState) {
+        console.log('Loaded State: ', loadedState);
+        console.log('Loaded Buildings: ', loadedState.buildings);
+
+
         // events to set resources, buildings and queue
+        eventBus.emit('setBuildingID', loadedState.currentBuildingId);
         eventBus.emit('setResources', loadedState.resources);
         eventBus.emit('clearBuildings');
-        eventBus.emit('setBuildings', loadedState.buildings);
-        eventBus.emit('setBuildingQueue', loadedState.queue);
+        eventBus.emit('restoreBuildings', loadedState);
 
-        eventBus.emit('gameLoaded', loadedState); // the entire game state
+        eventBus.on('buildingManagerRestored', () => {
+            eventBus.emit('gameLoaded', this.getGameState());
+        });
         console.log('Game state set');
     }
 }

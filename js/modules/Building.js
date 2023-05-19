@@ -35,6 +35,12 @@ class Building {
                 eventBus.emit('log.negative',"Not enough space to build!");
             }
         });
+
+        eventBus.on('setBuildingID', this.setBuildingID.bind(this));
+    }
+
+    setBuildingID (id) {
+        Building.idCounter = id;
     }
 
     setLevel(level) {

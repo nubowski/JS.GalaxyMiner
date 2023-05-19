@@ -1,6 +1,7 @@
 import eventBus from '../eventBus/EventBus.js';
 import {MAX_BUILDING_SPACE, DEFAULT_BUILDING_LEVEL, DEFAULT_QUEUE_SIZE} from "../data/constants.js";
 import createBuilding from "../utils/buildingFactory.js";
+import Building from "./Building.js";
 import Producer from "./Producer.js";
 
 class BuildingManager {
@@ -13,12 +14,6 @@ class BuildingManager {
         this.buildings = [];
         this.queue = [];
         this.maxSize = maxSize;
-
-        eventBus.on('setBuildings', ({buildingsData, gameState}) => {
-            gameState.buildings = buildingsData.map(
-                buildingData => createBuilding(buildingData.type, {...buildingData}, this.resources)
-            );
-        });
 
         eventBus.on('attemptToBuild', (buildingInfo) => {
             console.log('BuildingManager, attemptToBuild event, buildingInfo:', buildingInfo);
@@ -49,8 +44,8 @@ class BuildingManager {
         });
 
         eventBus.on('attemptToUpgrade', ({buildingID, buildings}) => this.upgradeBuilding(buildingID, buildings));
-        eventBus.on('setBuildingQueue', this.setBuildingQueue.bind(this));
-        eventBus.on('clearBuildings', this.clearBuildings);
+        eventBus.on('restoreBuildings', this.restoreBuildings.bind(this));
+        eventBus.on('clearBuildings', this.clearBuildings.bind(this));
     }
 
     updateProducers() {
@@ -143,6 +138,7 @@ class BuildingManager {
         const buildingIndex = buildings.findIndex(building => building.id === buildingID);
         if (buildingIndex !== -1) {
             const building = buildings[buildingIndex];
+            console.log('Building instance:', building instanceof Building);
             if (building.hasSufficientResources() && !building.underConstruction) {
                 if (this.addToQueue(building, true)) { // Only subtract resources if building is added to queue
                     building.subtractResourcesForBuilding();
@@ -163,6 +159,23 @@ class BuildingManager {
         }
     }
 
+    restoreBuildings (loadedState) {
+        this.buildings = loadedState.buildings.map(
+            building => createBuilding(building.type, {...building}, this.resources)
+        );
+
+        eventBus.emit('buildingUpdated', this.buildings);
+
+        this.setBuildingQueue(loadedState.queue);
+
+        eventBus.emit('updateQueueDisplay', loadedState.queue);
+
+        this.updateSpaces();
+
+        eventBus.emit('buildingManagerRestored');
+
+    }
+
     setBuildingQueue(queue) {
         this.queue = [];
         for (let id of queue) {
@@ -178,6 +191,25 @@ class BuildingManager {
         this.queue = [];
         this.usedSpaces = 0;
         this.reservedSpaces = 0;
+    }
+
+    updateSpaces() {
+        // Reset the used and reserved spaces
+        this.usedSpaces = 0;
+        this.reservedSpaces = 0;
+
+        // buildings and update the used and reserved spaces
+        for (let building of this.buildings) {
+            if (building.underConstruction) {
+                this.reservedSpaces += building.space;
+            } else {
+                this.usedSpaces += building.space;
+            }
+        }
+        // update reserved spaces based on buildings in queue
+        for (let building of this.queue) {
+            this.reservedSpaces += building.space;
+        }
     }
 
     getBuiltBuildings() {
