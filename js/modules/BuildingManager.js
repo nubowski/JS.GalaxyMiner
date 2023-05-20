@@ -168,7 +168,13 @@ class BuildingManager {
 
         this.setBuildingQueue(loadedState.queue);
 
-        eventBus.emit('updateQueueDisplay', loadedState.queue);
+        eventBus.emit('updateQueueDisplay', this.queue);
+
+        // Restore the remaining time for the building under construction
+        const nextBuilding = this.getNextBuilding();
+        if (nextBuilding && nextBuilding.remainingTime !== null) {
+            nextBuilding.remainingTime = loadedState.buildings.find((building) => building.id === nextBuilding.id).remainingTime;
+        }
 
         this.updateSpaces();
 
