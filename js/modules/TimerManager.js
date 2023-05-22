@@ -4,6 +4,8 @@ class TimerManager {
     constructor(tickInterval = 1000) { // default to 1 second intervals
         this.tickInterval = tickInterval;
         this.intervalID = null;
+
+        eventBus.on('StartContinueGame', this.start.bind(this));
     }
 
     start () {

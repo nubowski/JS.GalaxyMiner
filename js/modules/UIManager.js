@@ -4,6 +4,7 @@ import eventBus from "../eventBus/EventBus.js";
 class UImanager {
     constructor(buildingTemplates) {
         this.buildingTemplates = buildingTemplates;
+        this.createOverlay();
         eventBus.on('resourceUpdated', (resources) => this.updateResourceDisplay(resources));
         eventBus.on('buildingSpaceUpdated', (buildingManager) => this.updateSpaceDisplay(buildingManager));
         eventBus.on('buildingUpdated', (buildings) => this.updateBuildingDisplay(buildings));
@@ -16,6 +17,34 @@ class UImanager {
             this.updateSpaceDisplay(gameState.buildingManager);
         });
     }
+
+    createOverlay() {
+        const container = document.getElementById('buttonContainer');
+
+        // Create the overlay
+        const overlay = document.createElement('div');
+        overlay.id = 'overlay';
+        overlay.classList.add('overlay');
+
+        // Create the button container
+        const buttonContainer = document.createElement('div');
+        buttonContainer.classList.add('button-container');
+
+        // Create the start/continue button
+        const startButton = document.createElement('button');
+        startButton.id = 'start-continue-button';
+        startButton.textContent = 'Start Game'; // Modify the text based on the game state
+        buttonContainer.appendChild(startButton);
+
+        overlay.appendChild(buttonContainer);
+        container.appendChild(overlay);
+
+        // Prevent clicks on the overlay from propagating to underlying elements
+        overlay.addEventListener('click', (event) => {
+            event.stopPropagation();
+        });
+    }
+
 
     generateBuildingButtons() {
         const container = document.getElementById('buttonContainer');
