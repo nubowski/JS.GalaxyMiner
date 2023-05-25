@@ -170,9 +170,7 @@ class BuildingManager {
         eventBus.emit('updateQueueDisplay', this.queue);
 
         // Restore the remaining time for the building under construction
-        console.log('this.queue[0]: ', this.queue[0]);
         const nextBuilding = this.getNextBuilding();
-        console.log('remaining time: ', loadedState.buildings.remainingTime);
         if (nextBuilding && nextBuilding.remainingTime !== null) {
             nextBuilding.remainingTime = loadedState.queue.find((building) => building.id === nextBuilding.id).remainingTime;
         }
@@ -183,24 +181,30 @@ class BuildingManager {
 
     setBuildingQueue(loadedState) {
         this.queue = [];
+        const builtBuildings = this.getBuiltBuildings();
 
-        for (let [id, queueItem] of Object.entries(loadedState.queue)) {
-            let building = this.getBuiltBuildings().find(building => building.id === queueItem.id);
+        for (let queueItem of loadedState.queue) {
+            const existingBuilding = builtBuildings.find((building) => building.id === queueItem.id);
 
-            if (building) {
-                this.queue.push(building);
+            if (existingBuilding) {
+                // Update the existing building with the loaded data
+                existingBuilding.level = queueItem.level;
+                existingBuilding.isUpgrade = queueItem.isUpgrade;
+                existingBuilding.remainingTime = queueItem.remainingTime;
+                this.queue.push(existingBuilding);
             } else {
+                // Create a new building instance and add it to the queue
                 let buildingData = this.buildingTemplates.find(template => template.name === queueItem.name);
 
                 if (buildingData) {
-                    console.log('type: ', buildingData.type);
-                    console.log('building: ', queueItem);
-                    console.log('resources: ', this.resources);
                     let newBuilding = createBuilding(buildingData.type, {...buildingData}, this.resources);
+                    newBuilding.remainingTime = queueItem.remainingTime;
                     this.queue.push(newBuilding);
                 }
             }
         }
+        console.log('QUEUE: ', this.queue);
+        console.log('BUILDINGS: ', this.buildings);
     }
 
     clearBuildings() {
