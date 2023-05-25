@@ -32,8 +32,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let gameLog = new GameLog();
     eventBus.on('log', (data) => gameLog.addToLog(data.message, data.messageType));
 
-    // Start Timer
-    timerManager.start();
+    eventBus.on('StartContinueGame', () => {
+        const overlay = document.getElementById('overlay');
+        overlay.style.display = 'none';
+    });
+
 
     // Update the UI with the initial state of the game
     uiManager.updateDisplay(resourceManager.getResourceData(), buildingManager);  // Use ResourceManager's method
@@ -43,10 +46,16 @@ document.addEventListener('DOMContentLoaded', () => {
     eventBus.on('setGameState', (loadedState) => {
         if (loadedState === undefined) {
             console.log('Starting new game');
-            // start new game
+            // Start new game logic here
+
+            // Emit the 'handleGameLoaded' event with the initial game state
+            eventBus.emit('handleGameLoaded', gameStateManger.getGameState());
         } else {
             console.log('Continuing from saved game state');
-            // use loadedState to continue from the saved game state
+            // Use loadedState to continue from the saved game state
+
+            // Emit the 'handleGameLoaded' event with the loaded game state
+            eventBus.emit('handleGameLoaded', loadedState);
         }
     });
 });

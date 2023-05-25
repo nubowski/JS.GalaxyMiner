@@ -138,7 +138,6 @@ class BuildingManager {
         const buildingIndex = buildings.findIndex(building => building.id === buildingID);
         if (buildingIndex !== -1) {
             const building = buildings[buildingIndex];
-            console.log('Building instance:', building instanceof Building);
             if (building.hasSufficientResources() && !building.underConstruction) {
                 if (this.addToQueue(building, true)) { // Only subtract resources if building is added to queue
                     building.subtractResourcesForBuilding();
@@ -166,24 +165,46 @@ class BuildingManager {
 
         eventBus.emit('buildingUpdated', this.buildings);
 
-        this.setBuildingQueue(loadedState.queue);
+        this.setBuildingQueue(loadedState);
 
-        eventBus.emit('updateQueueDisplay', loadedState.queue);
+        eventBus.emit('updateQueueDisplay', this.queue);
+
+        // Restore the remaining time for the building under construction
+        const nextBuilding = this.getNextBuilding();
+        if (nextBuilding && nextBuilding.remainingTime !== null) {
+            nextBuilding.remainingTime = loadedState.queue.find((building) => building.id === nextBuilding.id).remainingTime;
+        }
 
         this.updateSpaces();
-
         eventBus.emit('buildingManagerRestored');
-
     }
 
-    setBuildingQueue(queue) {
+    setBuildingQueue(loadedState) {
         this.queue = [];
-        for (let id of queue) {
-            let building = this.getBuiltBuildings().find(building => building.id === id);
-            if (building) {
-                this.addToQueue(building);
+        const builtBuildings = this.getBuiltBuildings();
+
+        for (let queueItem of loadedState.queue) {
+            const existingBuilding = builtBuildings.find((building) => building.id === queueItem.id);
+
+            if (existingBuilding) {
+                // Update the existing building with the loaded data
+                existingBuilding.level = queueItem.level;
+                existingBuilding.isUpgrade = queueItem.isUpgrade;
+                existingBuilding.remainingTime = queueItem.remainingTime;
+                this.queue.push(existingBuilding);
+            } else {
+                // Create a new building instance and add it to the queue
+                let buildingData = this.buildingTemplates.find(template => template.name === queueItem.name);
+
+                if (buildingData) {
+                    let newBuilding = createBuilding(buildingData.type, {...buildingData}, this.resources);
+                    newBuilding.remainingTime = queueItem.remainingTime;
+                    this.queue.push(newBuilding);
+                }
             }
         }
+        console.log('QUEUE: ', this.queue);
+        console.log('BUILDINGS: ', this.buildings);
     }
 
     clearBuildings() {
