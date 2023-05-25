@@ -138,7 +138,6 @@ class BuildingManager {
         const buildingIndex = buildings.findIndex(building => building.id === buildingID);
         if (buildingIndex !== -1) {
             const building = buildings[buildingIndex];
-            console.log('Building instance:', building instanceof Building);
             if (building.hasSufficientResources() && !building.underConstruction) {
                 if (this.addToQueue(building, true)) { // Only subtract resources if building is added to queue
                     building.subtractResourcesForBuilding();
@@ -166,28 +165,41 @@ class BuildingManager {
 
         eventBus.emit('buildingUpdated', this.buildings);
 
-        this.setBuildingQueue(loadedState.queue);
+        this.setBuildingQueue(loadedState);
 
         eventBus.emit('updateQueueDisplay', this.queue);
 
         // Restore the remaining time for the building under construction
+        console.log('this.queue[0]: ', this.queue[0]);
         const nextBuilding = this.getNextBuilding();
+        console.log('remaining time: ', loadedState.buildings.remainingTime);
         if (nextBuilding && nextBuilding.remainingTime !== null) {
             nextBuilding.remainingTime = loadedState.buildings.find((building) => building.id === nextBuilding.id).remainingTime;
         }
 
         this.updateSpaces();
-
         eventBus.emit('buildingManagerRestored');
 
     }
 
-    setBuildingQueue(queue) {
+    setBuildingQueue(loadedState) {
         this.queue = [];
-        for (let id of queue) {
-            let building = this.getBuiltBuildings().find(building => building.id === id);
+
+        for (let [id, queueItem] of Object.entries(loadedState.queue)) {
+            let building = this.getBuiltBuildings().find(building => building.id === queueItem.id);
+
             if (building) {
-                this.addToQueue(building);
+                this.queue.push(building);
+            } else {
+                let buildingData = this.buildingTemplates.find(template => template.name === queueItem.name);
+
+                if (buildingData) {
+                    console.log('type: ', buildingData.type);
+                    console.log('building: ', queueItem);
+                    console.log('resources: ', this.resources);
+                    let newBuilding = createBuilding(buildingData.type, {...buildingData}, this.resources);
+                    this.queue.push(newBuilding);
+                }
             }
         }
     }

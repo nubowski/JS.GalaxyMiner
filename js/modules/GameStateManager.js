@@ -37,9 +37,14 @@ class GameStateManager {
             isUpgrade: building.isUpgrade,
             currentBuildingId: Building.idCounter,
         }));
-
         // save building queue
-        gameState.queue = this.buildingManager.getQueue().map(building => building.id);
+        gameState.queue = this.buildingManager.getQueue().map(building => ({
+            type: building.type,
+            id: building.id,
+            name: building.name,
+            level: building.level,
+            isUpgrade: building.isUpgrade,
+        }));
 
         return gameState;
     }
