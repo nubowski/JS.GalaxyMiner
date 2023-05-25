@@ -174,12 +174,11 @@ class BuildingManager {
         const nextBuilding = this.getNextBuilding();
         console.log('remaining time: ', loadedState.buildings.remainingTime);
         if (nextBuilding && nextBuilding.remainingTime !== null) {
-            nextBuilding.remainingTime = loadedState.buildings.find((building) => building.id === nextBuilding.id).remainingTime;
+            nextBuilding.remainingTime = loadedState.queue.find((building) => building.id === nextBuilding.id).remainingTime;
         }
 
         this.updateSpaces();
         eventBus.emit('buildingManagerRestored');
-
     }
 
     setBuildingQueue(loadedState) {

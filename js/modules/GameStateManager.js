@@ -44,6 +44,7 @@ class GameStateManager {
             name: building.name,
             level: building.level,
             isUpgrade: building.isUpgrade,
+            remainingTime: building.remainingTime,
         }));
 
         return gameState;
