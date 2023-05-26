@@ -1,5 +1,4 @@
 import {MAX_LOG_ENTRIES} from "../data/constants.js";
-
 import eventBus from "../eventBus/EventBus.js";
 
 class GameLog {
@@ -13,7 +12,6 @@ class GameLog {
         eventBus.on('log.debug', message => this.debug(message));
         eventBus.on('log.positive', message => this.positive(message));
         eventBus.on('log.negative', message => this.negative(message));
-
     }
 
     error(message) {

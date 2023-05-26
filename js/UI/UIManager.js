@@ -5,12 +5,14 @@ class UImanager {
     constructor(buildingTemplates) {
         this.buildingTemplates = buildingTemplates;
         this.createOverlay();
+        eventBus.on('tabClicked', (tabId) => this.changeActiveTab(tabId));
         eventBus.on('resourceUpdated', (resources) => this.updateResourceDisplay(resources));
         eventBus.on('buildingSpaceUpdated', (buildingManager) => this.updateSpaceDisplay(buildingManager));
         eventBus.on('buildingUpdated', (buildings) => this.updateBuildingDisplay(buildings));
         eventBus.on('updateQueueDisplay', (queue) => this.updateQueueDisplay(queue));
         eventBus.on('updateDisplay', ({resources, buildingManager}) => this.updateDisplay(resources, buildingManager));
         eventBus.on('createBuildButtons', () => this.generateBuildingButtons());
+        eventBus.on('createDebugButtons', () => this.generateDebugButtons());
         eventBus.on('gameLoaded', (gameState) => {
             this.updateBuildingDisplay(gameState.buildings);
             this.updateResourceDisplay(gameState.resources);
@@ -19,7 +21,7 @@ class UImanager {
     }
 
     createOverlay() {
-        const container = document.getElementById('buttonContainer');
+        const container = document.getElementById('start-button-container');
 
         // Create the overlay
         const overlay = document.createElement('div');
@@ -47,15 +49,51 @@ class UImanager {
 
 
     generateBuildingButtons() {
-        const container = document.getElementById('buttonContainer');
+        const tabContainer = document.getElementById('building-tab-content');
+
+        // Create a unique container for building content
+        const container = document.createElement('div');
+        container.className = 'building-content-wrapper';
 
         for (let buildingTemplate of this.buildingTemplates) {
+            let buildingItem = document.createElement('div');
+            buildingItem.className = 'build-item';
+            container.appendChild(buildingItem);  // building items to the unique container
+
+            let buildButtonContentContainer = document.createElement('div');
+            buildButtonContentContainer.className = 'build-button-content-container';
+            buildingItem.appendChild(buildButtonContentContainer);
+
+            let buildingName = document.createElement('p');
+            buildingName.textContent = buildingTemplate.name;
+            buildButtonContentContainer.appendChild(buildingName);
+
+            let buildButtonContainer = document.createElement('div');
+            buildButtonContainer.className = 'build-button-container';
+            buildingItem.appendChild(buildButtonContainer);
+
             let buildButton = document.createElement('button');
             buildButton.id = `build-${buildingTemplate.name}`;  // give the button a unique id
-            buildButton.textContent = `Build ${buildingTemplate.name}`;
-            container.appendChild(buildButton);
+            buildButton.className = 'build-button';  // add a class for styling
+            buildButton.textContent = `Build`;
+            buildButtonContainer.appendChild(buildButton);
+
+            // background img added
+            let imageElement = document.createElement('img');
+            imageElement.className = 'build-item-image';
+            let imageName = buildingTemplate.name.replace(/ /g, ''); // kill spaces
+            imageElement.src = `assets/images/buildings/${imageName}Icon.jpg`;
+            buildButtonContentContainer.appendChild(imageElement);
+
+
         }
 
+        // unique container to the tab
+        tabContainer.appendChild(container);
+    }
+
+    generateDebugButtons () {
+        const container = document.getElementById('debug-button-container')
         // Create a reset button
         let resetButton = document.createElement('button');
         resetButton.id = 'reset-game';  // give the button a unique id
@@ -63,24 +101,28 @@ class UImanager {
         container.appendChild(resetButton);
     }
 
+
     updateResourceDisplay(resources) {
+        const resourcesContent = document.getElementById('resources-content');
+
         for (let resource of resources) {
             let resourceDisplay = document.getElementById(`${resource.name}Display`);
             if (!resourceDisplay) {
                 resourceDisplay = document.createElement('div');
                 resourceDisplay.id = `${resource.name}Display`;
-                document.body.appendChild(resourceDisplay);
+                resourcesContent.appendChild(resourceDisplay); // Append to the resources content
             }
             resourceDisplay.innerHTML = `${resource.name}: ${resource.quantity}`;
         }
     }
 
     updateSpaceDisplay(buildingManager) {
+        const spaceContent = document.getElementById('spaces-content');
         let spaceDisplay = document.getElementById('spaceDisplay');
         if (!spaceDisplay) {
             spaceDisplay = document.createElement('div');
             spaceDisplay.id ='spaceDisplay';
-            document.body.appendChild(spaceDisplay);
+            spaceContent.appendChild(spaceDisplay);
         }
         spaceDisplay.innerHTML = `Space used: ${buildingManager.usedSpaces} / ${buildingManager.maxSpaces}`;
     }
@@ -125,6 +167,19 @@ class UImanager {
             queueItem.textContent = `Building: ${building.name}\nRemaining time: ${building.remainingTime / 1000}`;
             queueDisplay.appendChild(queueItem);
         }
+    }
+
+    changeActiveTab(tabId) {
+        // Get all tab contents
+        const tabs = document.getElementsByClassName('tab-content');
+
+        // Hide all tabs
+        for(let i = 0; i < tabs.length; i++) {
+            tabs[i].classList.remove('active');
+        }
+
+        // Show the selected tab
+        document.getElementById(tabId).classList.add('active');
     }
 
 }
