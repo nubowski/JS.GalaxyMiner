@@ -22,6 +22,7 @@ let buildingManager = new BuildingManager(buildingTemplates, resourceManager);
 let gameStateManger = new GameStateManager(resourceManager, buildingManager);
 
 eventBus.emit('createBuildButtons');
+eventBus.emit('createDebugButtons');
 eventBus.emit('onClickListener', buildingTemplates);
 
 // DOM-related interactions

@@ -12,6 +12,7 @@ class UImanager {
         eventBus.on('updateQueueDisplay', (queue) => this.updateQueueDisplay(queue));
         eventBus.on('updateDisplay', ({resources, buildingManager}) => this.updateDisplay(resources, buildingManager));
         eventBus.on('createBuildButtons', () => this.generateBuildingButtons());
+        eventBus.on('createDebugButtons', () => this.generateDebugButtons());
         eventBus.on('gameLoaded', (gameState) => {
             this.updateBuildingDisplay(gameState.buildings);
             this.updateResourceDisplay(gameState.resources);
@@ -48,21 +49,36 @@ class UImanager {
 
 
     generateBuildingButtons() {
-        const container = document.getElementById('buttonContainer');
+        const container = document.getElementById('building-tab-content');
 
         for (let buildingTemplate of this.buildingTemplates) {
+            let buildingItem = document.createElement('div');
+            buildingItem.className = 'bqueue-item';
+
+            let buildingName = document.createElement('p');
+            buildingName.textContent = buildingTemplate.name;
+            buildingItem.appendChild(buildingName);
+
             let buildButton = document.createElement('button');
             buildButton.id = `build-${buildingTemplate.name}`;  // give the button a unique id
-            buildButton.textContent = `Build ${buildingTemplate.name}`;
-            container.appendChild(buildButton);
+            buildButton.textContent = `Build`;
+            buildingItem.appendChild(buildButton);
+
+            container.appendChild(buildingItem);
         }
 
+
+    }
+
+    generateDebugButtons () {
+        const container = document.getElementById('debug-button-container')
         // Create a reset button
         let resetButton = document.createElement('button');
         resetButton.id = 'reset-game';  // give the button a unique id
         resetButton.textContent = 'Reset Game';
         container.appendChild(resetButton);
     }
+
 
     updateResourceDisplay(resources) {
         const resourcesContent = document.getElementById('resources-content');
