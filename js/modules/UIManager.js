@@ -64,7 +64,7 @@ class UImanager {
     }
 
     updateResourceDisplay(resources) {
-        const resourcesContent = document.getElementById("resources-content");
+        const resourcesContent = document.getElementById('resources-content');
 
         for (let resource of resources) {
             let resourceDisplay = document.getElementById(`${resource.name}Display`);
@@ -78,11 +78,12 @@ class UImanager {
     }
 
     updateSpaceDisplay(buildingManager) {
+        const spaceContent = document.getElementById('spaces-content');
         let spaceDisplay = document.getElementById('spaceDisplay');
         if (!spaceDisplay) {
             spaceDisplay = document.createElement('div');
             spaceDisplay.id ='spaceDisplay';
-            document.body.appendChild(spaceDisplay);
+            spaceContent.appendChild(spaceDisplay);
         }
         spaceDisplay.innerHTML = `Space used: ${buildingManager.usedSpaces} / ${buildingManager.maxSpaces}`;
     }
