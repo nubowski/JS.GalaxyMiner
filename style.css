@@ -59,6 +59,7 @@ body:before {
 /* BUILDING tab */
 
 .build-item {
+    position: relative;
     width: 100px;
     height: 100px;
     background-color: #666;
@@ -68,9 +69,56 @@ body:before {
     justify-content: center;
     align-items: center;
     border-radius: 5px;
+    text-align: center;
+    margin: 10px;
+    overflow: hidden;  /* image does not extend past the border */
 }
 
+.build-button-content-container {
+    z-index: 2;  /* So it's in front of the image */
+    position: relative;  /* To create a new stacking context for the z-index */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
 
+.build-button-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.build-button {
+    margin-bottom: 5px;
+    z-index: 2
+}
+
+.building-content-wrapper {
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.build-item-image {
+    position: absolute;  /* it acts like a background */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;  /* whole area */
+    opacity: 0.5;  /* So the text is readable */
+    z-index: 1;  /* So it's behind the text */
+}
 
 /* RESOURCES PANEL */
 

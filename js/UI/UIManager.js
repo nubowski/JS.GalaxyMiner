@@ -49,25 +49,47 @@ class UImanager {
 
 
     generateBuildingButtons() {
-        const container = document.getElementById('building-tab-content');
+        const tabContainer = document.getElementById('building-tab-content');
+
+        // Create a unique container for building content
+        const container = document.createElement('div');
+        container.className = 'building-content-wrapper';
 
         for (let buildingTemplate of this.buildingTemplates) {
             let buildingItem = document.createElement('div');
             buildingItem.className = 'build-item';
+            container.appendChild(buildingItem);  // building items to the unique container
+
+            let buildButtonContentContainer = document.createElement('div');
+            buildButtonContentContainer.className = 'build-button-content-container';
+            buildingItem.appendChild(buildButtonContentContainer);
 
             let buildingName = document.createElement('p');
             buildingName.textContent = buildingTemplate.name;
-            buildingItem.appendChild(buildingName);
+            buildButtonContentContainer.appendChild(buildingName);
+
+            let buildButtonContainer = document.createElement('div');
+            buildButtonContainer.className = 'build-button-container';
+            buildingItem.appendChild(buildButtonContainer);
 
             let buildButton = document.createElement('button');
             buildButton.id = `build-${buildingTemplate.name}`;  // give the button a unique id
+            buildButton.className = 'build-button';  // add a class for styling
             buildButton.textContent = `Build`;
-            buildingItem.appendChild(buildButton);
+            buildButtonContainer.appendChild(buildButton);
 
-            container.appendChild(buildingItem);
+            // background img added
+            let imageElement = document.createElement('img');
+            imageElement.className = 'build-item-image';
+            let imageName = buildingTemplate.name.replace(/ /g, ''); // kill spaces
+            imageElement.src = `assets/images/buildings/${imageName}Icon.jpg`;
+            buildButtonContentContainer.appendChild(imageElement);
+
+
         }
 
-
+        // unique container to the tab
+        tabContainer.appendChild(container);
     }
 
     generateDebugButtons () {
