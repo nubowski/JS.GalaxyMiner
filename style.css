@@ -56,7 +56,19 @@ body:before {
     display: block;
 }
 
+/* BUILDING tab */
 
+.build-item {
+    width: 100px;
+    height: 100px;
+    background-color: #666;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+}
 
 
 
@@ -139,6 +151,7 @@ button {
     align-items: center;
     border-radius: 5px;
 }
+
 
 /* BUILDINGS LINE */
 

@@ -21,7 +21,7 @@ class UImanager {
     }
 
     createOverlay() {
-        const container = document.getElementById('buttonContainer');
+        const container = document.getElementById('start-button-container');
 
         // Create the overlay
         const overlay = document.createElement('div');
@@ -53,7 +53,7 @@ class UImanager {
 
         for (let buildingTemplate of this.buildingTemplates) {
             let buildingItem = document.createElement('div');
-            buildingItem.className = 'bqueue-item';
+            buildingItem.className = 'build-item';
 
             let buildingName = document.createElement('p');
             buildingName.textContent = buildingTemplate.name;
