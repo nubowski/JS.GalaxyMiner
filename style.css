@@ -26,70 +26,168 @@ body:before {
     background-color: #444;
 }
 
-#game-container {
-    width: 80%;
-    margin: 0 auto;
+#main-container {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 10px;
+    padding: 10px;
 }
 
-/*
-#resources-container,
-#production-container,
-#upgrades-container {
+#resource-section, #building-queue {
     background-color: #444;
     padding: 20px;
-    margin: 10px 0;
     border-radius: 10px;
 }
- */
+
+/* MAIN GAMING DYNAMIC SCREEN */
+
+#game-zone {
+    background-color: #444;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.tab-content {
+    display: none;
+    /* ... styles here ... */
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* BUILDING tab */
+
+.build-item {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    background-color: #2c2c2c;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    margin: 10px;
+    overflow: hidden;  /* image does not extend past the border */
+}
+
+.build-button-content-container p {
+    color: #fff;
+    text-align: center;
+    z-index: 2;
+}
+
+.build-button-content-container {
+    z-index: 2;  /* So it's in front of the image */
+    position: relative;  /* To create a new stacking context for the z-index */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.build-button-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 30px; /* setting height to 15% of the parent element */
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.build-button {
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    color: #ffffff;
+}
+
+.building-content-wrapper {
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.build-item-image {
+    position: absolute;  /* it acts like a background */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;  /* whole area */
+    opacity: 0.5;  /* So the text is readable */
+    z-index: 1;  /* So it's behind the text */
+}
+
+/* RESOURCES PANEL */
+
+#resources-content {
+    background-color: #444;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+#spaces-content {
+    background-color: #444;
+    padding: 20px;
+    border-radius: 10px;
+}
 
 #info-section {
-    width: 80%;
-    margin: 20px auto;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+#game-log, #tooltip {
+    background-color: #444;
+    padding: 20px;
+    border-radius: 10px;
+    width: 45%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#game-log h2, #tooltip h2 {
+    text-align: center;
+    width: 100%;
+}
+
+#tab-section {
+    text-align: center;
     padding: 20px;
     background-color: #444;
     border-radius: 10px;
-}
-
-#game-log {
-    height: 200px;
-    overflow-y: auto;
-    border: 1px solid #ccc;
-    padding: 10px;
-    background-color: #555;
-    color: #fff;
 }
 
 button {
     color: #333;
     background-color: #fff;
-    padding: 5px 10px;
+    padding: 10px;
+    margin: 5px;
     border-radius: 5px;
     border: none;
-    margin-top: 10px;
     cursor: pointer;
 }
 
-/* GameLog different colors */
-
-.info {
-    color: blue;
-}
-
-.error {
-    color: red;
-}
-
-.debug {
-    color: gray;
-}
-
-.positive {
-    color: green;
-}
-
-.negative {
-    color: orange;
-}
+/* QUEUE LINE */
 
 #queueDisplay {
     background-color: #444;
@@ -116,16 +214,18 @@ button {
     border-radius: 5px;
 }
 
-#buildings-container {
-    background-color: #444;
-    padding: 20px;
-    border-radius: 10px;
-}
+
+/* BUILDINGS LINE */
 
 #built-buildings {
+    text-align: center;
+    background-color: #444;
+    padding: 20px;
+    margin-top: 10px;
+    border-radius: 10px;
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 20px;
 }
 
 .built-building {
@@ -154,6 +254,8 @@ button {
     margin-top: 5px;
 }
 
+/* OVERLAY START GAME */
+
 .overlay {
     position: fixed;
     top: 0;
@@ -180,4 +282,26 @@ button {
 #start-game,
 #continue-game {
     width: 150px;
+}
+
+/* GAME LOG COLORS */
+
+.info {
+    color: blue;
+}
+
+.error {
+    color: red;
+}
+
+.debug {
+    color: gray;
+}
+
+.positive {
+    color: green;
+}
+
+.negative {
+    color: orange;
 }

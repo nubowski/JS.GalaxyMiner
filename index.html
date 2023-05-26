@@ -12,29 +12,62 @@
     <p>Manage your interstellar mining empire!</p>
 </div>
 
-<div id="game-container">
-    <div id="queueDisplay">
-        <h2>Building Queue</h2>
-        <div id="building-queue" class="queue-wrapper">
-            <!-- Building queue will be dynamically added here -->
+<div id="main-container">
+    <div id="resource-section">
+        <div id="resources-content">
+        <h2>Resources:</h2>
+        <!-- Resources will be added dynamically here -->
+        </div>
+        <div id="spaces-content">
+        <h3>Empty Spaces:</h3>
+        <!-- Empty spaces content -->
         </div>
     </div>
-    <div id="buildings-container">
-        <h2>Built Buildings</h2>
-        <div id="built-buildings" class="built-buildings-wrapper">
-            <!-- Built buildings will be dynamically added here -->
-        </div>
+
+    <div id="game-zone">
+        <!-- Game zone content -->
+        <div id="research-tab-content" class="tab-content">Research</div>
+        <div id="building-tab-content" class="tab-content">Building</div>
+        <div id="achievements-tab-content" class="tab-content">Achievements</div>
+        <div id="settings-tab-content" class="tab-content">Settings</div>
+    </div>
+
+    <div id="building-queue">
+        <h2>Building Queue:</h2>
     </div>
 </div>
 
 <div id="info-section">
-    <h2>Game Log:</h2>
     <div id="game-log">
+        <h2>Game Log:</h2>
         <!-- Game info will be dynamically added here -->
+    </div>
+    <div id="tooltip">
+        <h2>Info:</h2>
+        <!-- Tooltip content -->
     </div>
 </div>
 
-<div id="buttonContainer">
+
+<div id="buildings-container">
+    <h2>Completed Buildings:</h2>
+    <div id="built-buildings" class="built-buildings-wrapper">
+
+    </div>
+</div>
+
+<div id="tab-section">
+    <button id="research-tab">Research Tab</button>
+    <button id="building-tab">Buildings Tab</button>
+    <button id="achievements-tab">Achievements Tab</button>
+    <button id="settings-tab">Settings Tab</button>
+</div>
+
+<div id="debug-button-container">
+
+</div>
+
+<div id="start-button-container">
 
 </div>
 

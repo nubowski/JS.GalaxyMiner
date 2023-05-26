@@ -15,16 +15,7 @@ class BuildingManager {
         this.queue = [];
         this.maxSize = maxSize;
 
-        eventBus.on('attemptToBuild', (buildingInfo) => {
-            console.log('BuildingManager, attemptToBuild event, buildingInfo:', buildingInfo);
-            let buildingData = this.buildingTemplates.find(template => template.name === buildingInfo.name);
-            if (!buildingData) {
-                console.error(`Unknown building: ${buildingInfo.name}`);
-                return;
-            }
-            let newBuilding = createBuilding(buildingData.type, buildingData, this.resources);
-            this.addToQueue(newBuilding);
-        });
+        eventBus.on('attemptToBuild', (buildingInfo) => this.attemptToBuild(buildingInfo));
 
         eventBus.on('timerTick', () => {
             if (this.queue.length > 0) {
@@ -46,6 +37,17 @@ class BuildingManager {
         eventBus.on('attemptToUpgrade', ({buildingID, buildings}) => this.upgradeBuilding(buildingID, buildings));
         eventBus.on('restoreBuildings', this.restoreBuildings.bind(this));
         eventBus.on('clearBuildings', this.clearBuildings.bind(this));
+    }
+
+    attemptToBuild (buildingInfo) {
+        // TODO id counts on every `attempt (click)` so need to refactor base building logic later or add IDManager
+        let buildingData = this.buildingTemplates.find(template => template.name === buildingInfo.name);
+        if (!buildingData) {
+            console.error(`Unknown building: ${buildingInfo.name}`);
+            return;
+        }
+        let newBuilding = createBuilding(buildingData.type, buildingData, this.resources);
+        this.addToQueue(newBuilding);
     }
 
     updateProducers() {
