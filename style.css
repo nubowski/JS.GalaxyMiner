@@ -146,6 +146,8 @@ body:before {
     width: 50%;
 }
 
+/* Space Progress Bar */
+
 #empty-spaces-bar {
     width: 100%;
     height: 20px;
