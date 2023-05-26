@@ -89,6 +89,9 @@ button {
     border: none;
     cursor: pointer;
 }
+/* QUEUE LINE */
+
+
 
 /* BUILDINGS LINE */
 
@@ -127,6 +130,36 @@ button {
 .building-wrapper button {
     display: block;
     margin-top: 5px;
+}
+
+/* OVERLAY START GAME */
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+#start-game,
+#continue-game {
+    width: 150px;
 }
 
 /* GAME LOG COLORS */

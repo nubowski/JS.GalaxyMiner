@@ -4,8 +4,8 @@ import TimerManager from './modules/TimerManager.js';
 import GameLog from './modules/GameLog.js';
 import buildingData from './data/buildingData.js';
 import BuildingManager from './modules/BuildingManager.js';
-import UIManager from './modules/UIManager.js';
-import UserInputManager from './modules/UserInputManager.js';
+import UIManager from './UI/UIManager.js';
+import UserInputManager from './UI/UserInputManager.js';
 import GameStateManager from "./modules/GameStateManager.js";
 import SaveManager from "./modules/SaveManager.js";
 
