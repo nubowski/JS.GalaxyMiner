@@ -2,28 +2,37 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Galaxy Miner</title>
-    <link rel="icon" type="image/png" href="https://i.ibb.co/X31cSZt/favicon32.png">
+    <title>Game Name</title>
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
 <div id="header">
-    <h1>Galaxy Miner</h1>
-    <p>Manage your interstellar mining empire!</p>
+    <h1>Game Name</h1>
 </div>
 
-<div id="game-container">
-    <div id="queueDisplay">
-        <h2>Building Queue</h2>
-        <div id="building-queue" class="queue-wrapper">
-            <!-- Building queue will be dynamically added here -->
-        </div>
+<div id="main-container">
+    <div id="resource-section">
+        <h2>Resources:</h2>
+        <p>Wood: 100</p>
+        <p>Stone: 200</p>
+        <p>Food: 300</p>
+        <p>Iron: 400</p>
+        <p>Gold: 500</p>
+        <h3>Empty Spaces:</h3>
+        <p>4 of 15</p>
     </div>
-    <div id="buildings-container">
-        <h2>Built Buildings</h2>
-        <div id="built-buildings" class="built-buildings-wrapper">
-            <!-- Built buildings will be dynamically added here -->
-        </div>
+
+    <div id="game-zone">
+        <!-- Game zone content -->
+    </div>
+
+    <div id="building-queue">
+        <h2>Building Queue:</h2>
+        <p>Building 1</p>
+        <p>Building 2</p>
+        <p>Building 3</p>
+        <p>Building 4</p>
+        <p>Building 5</p>
     </div>
 </div>
 
@@ -32,12 +41,21 @@
     <div id="game-log">
         <!-- Game info will be dynamically added here -->
     </div>
+    <div id="tooltip">
+        <!-- Tooltip content -->
+    </div>
 </div>
 
-<div id="buttonContainer">
-
+<div id="completed-buildings">
+    <h2>Completed Buildings:</h2>
+    <p>B1 | B2 | B3 | B4 | B5 | B6 | B7 | ...</p>
 </div>
 
-<script type="module" src="js/main.js"></script>
+<div id="tab-section">
+    <button id="research-tab">Research Tab</button>
+    <button id="buildings-tab">Buildings Tab</button>
+    <button id="achievements-tab">Achievements Tab</button>
+    <button id="settings-tab">Settings Tab</button>
+</div>
 </body>
 </html>
