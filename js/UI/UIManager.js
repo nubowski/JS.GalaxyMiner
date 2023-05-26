@@ -125,6 +125,22 @@ class UImanager {
             spaceContent.appendChild(spaceDisplay);
         }
         spaceDisplay.innerHTML = `Space used: ${buildingManager.usedSpaces} / ${buildingManager.maxSpaces}`;
+
+        // Update the progress bar
+        let spaceProgressBar = document.getElementById('empty-spaces-bar');
+        spaceProgressBar.value = buildingManager.usedSpaces;
+        spaceProgressBar.max = buildingManager.maxSpaces;
+
+        // Determine the color based on the percentage of used space
+        let percentUsed = (buildingManager.usedSpaces / buildingManager.maxSpaces) * 100;
+
+        if (percentUsed <= 30) {
+            spaceProgressBar.className = 'progress-green';
+        } else if (percentUsed <= 80) {
+            spaceProgressBar.className = 'progress-yellow';
+        } else {
+            spaceProgressBar.className = 'progress-red';
+        }
     }
 
     updateDisplay(resources, buildingManager) {

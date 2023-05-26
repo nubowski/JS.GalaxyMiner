@@ -33,7 +33,7 @@ body:before {
     padding: 10px;
 }
 
-#resource-section, #building-queue {
+#building-queue {
     background-color: #444;
     padding: 20px;
     border-radius: 10px;
@@ -136,17 +136,37 @@ body:before {
 
 /* RESOURCES PANEL */
 
-#resources-content {
+#resource-section {
     background-color: #444;
     padding: 20px;
     border-radius: 10px;
-    margin-bottom: 20px;
 }
 
 #spaces-content {
-    background-color: #444;
-    padding: 20px;
-    border-radius: 10px;
+    width: 50%;
+}
+
+#empty-spaces-bar {
+    width: 100%;
+    height: 20px;
+    appearance: none; /* This is necessary to apply custom styles in some browsers */
+    direction: ltr; /* This will make the bar fill from left to right */
+}
+
+#empty-spaces-bar::-webkit-progress-bar {
+    background-color: #ddd;
+}
+
+#empty-spaces-bar.progress-green::-webkit-progress-value {
+    background-color: #4CAF50;
+}
+
+#empty-spaces-bar.progress-yellow::-webkit-progress-value {
+    background-color: #DAA520;
+}
+
+#empty-spaces-bar.progress-red::-webkit-progress-value {
+    background-color: #F00;
 }
 
 #info-section {
@@ -213,7 +233,6 @@ button {
     align-items: center;
     border-radius: 5px;
 }
-
 
 /* BUILDINGS LINE */
 
