@@ -10,10 +10,8 @@ class Producer extends Building {
         this.underConstruction = false;
     }
 
-
-    // Override for the buildings.upgrade
-    // Override for the buildings.upgrade
     upgrade() {
+        // simple upgrade override for producers. add prodRate and levels
         this.level += 1;
         this.updateCost();
         this.productionRate *= this.level;
