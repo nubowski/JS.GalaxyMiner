@@ -89,9 +89,33 @@ button {
     border: none;
     cursor: pointer;
 }
+
 /* QUEUE LINE */
 
+#queueDisplay {
+    background-color: #444;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
 
+#building-queue {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.bqueue-item {
+    width: 100px;
+    height: 100px;
+    background-color: #666;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+}
 
 /* BUILDINGS LINE */
 
