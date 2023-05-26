@@ -5,7 +5,7 @@ class UITooltip {
 
     createTooltip() {
         this.tooltipElement = document.createElement('div');
-        this.tooltipElement.className = 'tooltip';
+        this.tooltipElement.className = 'tooltip-content';
         document.body.appendChild(this.tooltipElement);
     }
 
