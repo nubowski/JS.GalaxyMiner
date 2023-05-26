@@ -9,10 +9,10 @@ class GameLog {
         this.logElement = document.getElementById('game-log');
 
         eventBus.on('log.error', message => this.error(message));
-        eventBus.on('log.info', message => this.error(message));
-        eventBus.on('log.debug', message => this.error(message));
-        eventBus.on('log.positive', message => this.error(message));
-        eventBus.on('log.negative', message => this.error(message));
+        eventBus.on('log.info', message => this.info(message));
+        eventBus.on('log.debug', message => this.debug(message));
+        eventBus.on('log.positive', message => this.positive(message));
+        eventBus.on('log.negative', message => this.negative(message));
 
     }
 
