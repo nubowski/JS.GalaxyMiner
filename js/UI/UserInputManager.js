@@ -7,7 +7,9 @@ class UserInputManager {
         eventBus.on('onClickListener', (buildingTemplates) => this.attachEventHandlers(buildingTemplates));
         eventBus.on('upgradeButtonCreated', ({buttonId, buildings}) => this.attachUpgradeEventHandler(buttonId, buildings));
         eventBus.on('buildingAdded', ({templates}) => this.attachEventHandlers(templates));
+
     }
+
 
     handleGameLoaded(gameState) {
         const overlay = document.getElementById('overlay');
@@ -43,6 +45,11 @@ class UserInputManager {
         resetButton.onclick = () => {
             eventBus.emit('ResetGame');
         };
+
+        document.getElementById('research-tab').addEventListener('click', () => eventBus.emit('tabClicked', "research-tab-content"));
+        document.getElementById('building-tab').addEventListener('click', () => eventBus.emit('tabClicked', "building-tab-content"));
+        document.getElementById('achievements-tab').addEventListener('click', () => eventBus.emit('tabClicked', "achievements-tab-content"));
+        document.getElementById('settings-tab').addEventListener('click', () => eventBus.emit('tabClicked', "settings-tab-content"));
     }
 
     attachUpgradeEventHandler(buttonId, buildings) {

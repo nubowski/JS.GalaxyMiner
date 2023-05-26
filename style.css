@@ -33,11 +33,34 @@ body:before {
     padding: 10px;
 }
 
-#resource-section, #game-zone, #building-queue {
+#resource-section, #building-queue {
     background-color: #444;
     padding: 20px;
     border-radius: 10px;
 }
+
+/* MAIN GAMING DYNAMIC SCREEN */
+
+#game-zone {
+    background-color: #444;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.tab-content {
+    display: none;
+    /* ... styles here ... */
+}
+
+.tab-content.active {
+    display: block;
+}
+
+
+
+
+
+/* RESOURCES PANEL */
 
 #resources-content {
     background-color: #444;

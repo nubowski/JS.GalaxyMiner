@@ -5,6 +5,7 @@ class UImanager {
     constructor(buildingTemplates) {
         this.buildingTemplates = buildingTemplates;
         this.createOverlay();
+        eventBus.on('tabClicked', (tabId) => this.changeActiveTab(tabId));
         eventBus.on('resourceUpdated', (resources) => this.updateResourceDisplay(resources));
         eventBus.on('buildingSpaceUpdated', (buildingManager) => this.updateSpaceDisplay(buildingManager));
         eventBus.on('buildingUpdated', (buildings) => this.updateBuildingDisplay(buildings));
@@ -128,6 +129,19 @@ class UImanager {
             queueItem.textContent = `Building: ${building.name}\nRemaining time: ${building.remainingTime / 1000}`;
             queueDisplay.appendChild(queueItem);
         }
+    }
+
+    changeActiveTab(tabId) {
+        // Get all tab contents
+        const tabs = document.getElementsByClassName('tab-content');
+
+        // Hide all tabs
+        for(let i = 0; i < tabs.length; i++) {
+            tabs[i].classList.remove('active');
+        }
+
+        // Show the selected tab
+        document.getElementById(tabId).classList.add('active');
     }
 
 }
