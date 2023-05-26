@@ -16,6 +16,9 @@ class GameStateManager {
     }
 
     getGameState() {
+
+        // TODO re-fucktor as hell. And make ONE DATA to rule`em all
+
         let gameState = {};
 
         // save resources
