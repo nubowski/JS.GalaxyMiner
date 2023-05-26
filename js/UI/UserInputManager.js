@@ -2,6 +2,7 @@ import eventBus from "../eventBus/EventBus.js";
 
 class UserInputManager {
     constructor() {
+        this.tooltipTimer = null;
 
 
         eventBus.on('onClickListener', (buildingTemplates) => this.attachEventHandlers(buildingTemplates));
@@ -9,7 +10,6 @@ class UserInputManager {
         eventBus.on('buildingAdded', ({templates}) => this.attachEventHandlers(templates));
 
     }
-
 
     handleGameLoaded(gameState) {
         const overlay = document.getElementById('overlay');
@@ -31,9 +31,18 @@ class UserInputManager {
     attachEventHandlers(buildingTemplates) {
         for (let buildingTemplate of buildingTemplates) {
             let buildButton = document.getElementById(`build-${buildingTemplate.name}`);
+            console.log('description: ', buildingTemplate.description);
             buildButton.onclick = () => {
                 eventBus.emit('attemptToBuild', buildingTemplate);
             };
+            // TODO unification of these info
+            buildButton.addEventListener('mouseenter', (e) => {
+                eventBus.emit('hoverStart', {e, tooltipContent: buildingTemplate.description});
+            });
+            buildButton.addEventListener('mouseleave', () => {
+                eventBus.emit('hoverEnd');
+                eventBus.emit('hideTooltip');
+            });
         }
 
         let startContinueButton = document.getElementById('start-continue-button');

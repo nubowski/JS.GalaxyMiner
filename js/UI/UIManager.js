@@ -1,10 +1,16 @@
 import eventBus from "../eventBus/EventBus.js";
+import UITooltip from "../UI/UITooltip.js";
 
 
 class UImanager {
     constructor(buildingTemplates) {
+        this.tooltip = new UITooltip();
         this.buildingTemplates = buildingTemplates;
         this.createOverlay();
+        eventBus.on('hoverStart', this.handleHoverStart.bind(this));
+        eventBus.on('hoverEnd', this.handleHoverEnd.bind(this));
+        eventBus.on('showTooltip', this.tooltip.showTooltip.bind(this.tooltip));
+        eventBus.on('hideTooltip', this.tooltip.hideTooltip.bind(this.tooltip));
         eventBus.on('tabClicked', (tabId) => this.changeActiveTab(tabId));
         eventBus.on('resourceUpdated', (resources) => this.updateResourceDisplay(resources));
         eventBus.on('buildingSpaceUpdated', (buildingManager) => this.updateSpaceDisplay(buildingManager));
@@ -18,6 +24,16 @@ class UImanager {
             this.updateResourceDisplay(gameState.resources);
             this.updateSpaceDisplay(gameState.buildingManager);
         });
+    }
+
+    handleHoverStart({e, tooltipContent}) {
+        this.tooltipTimer = setTimeout(() => {
+            eventBus.emit('showTooltip', {event: e, content: tooltipContent});
+        }, 1000); // Display the tooltip after 1 second
+    }
+
+    handleHoverEnd() {
+        clearTimeout(this.tooltipTimer); // Cancel the tooltip if the mouse leaves before 1 second
     }
 
     createOverlay() {
@@ -125,6 +141,22 @@ class UImanager {
             spaceContent.appendChild(spaceDisplay);
         }
         spaceDisplay.innerHTML = `Space used: ${buildingManager.usedSpaces} / ${buildingManager.maxSpaces}`;
+
+        // Update the progress bar
+        let spaceProgressBar = document.getElementById('empty-spaces-bar');
+        spaceProgressBar.value = buildingManager.usedSpaces;
+        spaceProgressBar.max = buildingManager.maxSpaces;
+
+        // Determine the color based on the percentage of used space
+        let percentUsed = (buildingManager.usedSpaces / buildingManager.maxSpaces) * 100;
+
+        if (percentUsed <= 30) {
+            spaceProgressBar.className = 'progress-green';
+        } else if (percentUsed <= 80) {
+            spaceProgressBar.className = 'progress-yellow';
+        } else {
+            spaceProgressBar.className = 'progress-red';
+        }
     }
 
     updateDisplay(resources, buildingManager) {
