@@ -64,12 +64,14 @@ class UImanager {
     }
 
     updateResourceDisplay(resources) {
+        const resourcesContent = document.getElementById("resources-content");
+
         for (let resource of resources) {
             let resourceDisplay = document.getElementById(`${resource.name}Display`);
             if (!resourceDisplay) {
                 resourceDisplay = document.createElement('div');
                 resourceDisplay.id = `${resource.name}Display`;
-                document.body.appendChild(resourceDisplay);
+                resourcesContent.appendChild(resourceDisplay); // Append to the resources content
             }
             resourceDisplay.innerHTML = `${resource.name}: ${resource.quantity}`;
         }

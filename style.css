@@ -39,6 +39,19 @@ body:before {
     border-radius: 10px;
 }
 
+#resources-content {
+    background-color: #444;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+#spaces-content {
+    background-color: #444;
+    padding: 20px;
+    border-radius: 10px;
+}
+
 #info-section {
     display: flex;
     justify-content: space-between;
@@ -60,14 +73,6 @@ body:before {
     width: 100%;
 }
 
-#completed-buildings {
-    text-align: center;
-    background-color: #444;
-    padding: 20px;
-    margin-top: 10px;
-    border-radius: 10px;
-}
-
 #tab-section {
     text-align: center;
     padding: 20px;
@@ -83,4 +88,65 @@ button {
     border-radius: 5px;
     border: none;
     cursor: pointer;
+}
+
+/* BUILDINGS LINE */
+
+#built-buildings {
+    text-align: center;
+    background-color: #444;
+    padding: 20px;
+    margin-top: 10px;
+    border-radius: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.built-building {
+    width: 100px;
+    height: 100px;
+    background-color: #888;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+}
+
+.building-wrapper {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.building-wrapper:last-child {
+    margin-right: 0;
+}
+
+.building-wrapper button {
+    display: block;
+    margin-top: 5px;
+}
+
+/* GAME LOG COLORS */
+
+.info {
+    color: blue;
+}
+
+.error {
+    color: red;
+}
+
+.debug {
+    color: gray;
+}
+
+.positive {
+    color: green;
+}
+
+.negative {
+    color: orange;
 }

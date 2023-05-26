@@ -14,14 +14,14 @@
 
 <div id="main-container">
     <div id="resource-section">
+        <div id="resources-content">
         <h2>Resources:</h2>
-        <p>Wood: 100</p>
-        <p>Stone: 200</p>
-        <p>Food: 300</p>
-        <p>Iron: 400</p>
-        <p>Gold: 500</p>
+        <!-- Resources will be added dynamically here -->
+        </div>
+        <div id="spaces-content">
         <h3>Empty Spaces:</h3>
-        <p>4 of 15</p>
+        <!-- Empty spaces content -->
+        </div>
     </div>
 
     <div id="game-zone">
@@ -50,9 +50,11 @@
 </div>
 
 
-<div id="completed-buildings">
+<div id="buildings-container">
     <h2>Completed Buildings:</h2>
-    <p>B1 | B2 | B3 | B4 | B5 | B6 | B7 | ...</p>
+    <div id="built-buildings" class="built-buildings-wrapper">
+
+    </div>
 </div>
 
 <div id="tab-section">
@@ -61,5 +63,14 @@
     <button id="achievements-tab">Achievements Tab</button>
     <button id="settings-tab">Settings Tab</button>
 </div>
+
+<div id="buttonContainer">
+
+</div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
+
 </body>
 </html>
